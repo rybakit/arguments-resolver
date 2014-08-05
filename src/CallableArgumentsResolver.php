@@ -32,7 +32,7 @@ class CallableArgumentsResolver
                 break;
             }
 
-            $name = $parameter->getName();
+            $name = $parameter->name;
 
             if (array_key_exists($name, $parameters)) {
                 $value = $parameters[$name];
@@ -41,7 +41,7 @@ class CallableArgumentsResolver
                 $value = array_shift($parameters);
             }
 
-            static::assertParameterValue($parameter, $value);
+            static::assertArgument($parameter, $value);
 
             $arguments[] = $value;
         }
@@ -71,14 +71,14 @@ class CallableArgumentsResolver
         return new \ReflectionFunction($this->callable);
     }
 
-    protected static function assertParameterValue(\ReflectionParameter $parameter, $value)
+    protected static function assertArgument(\ReflectionParameter $parameter, $value)
     {
         if ($parameter->isArray() && !is_array($value)) {
-            throw new InvalidArgumentTypeException($parameter, 'array', $value);
+            throw new InvalidArgumentTypeException('array', $parameter, $value);
         }
 
         if ($parameter->isCallable() && !is_callable($value)) {
-            throw new InvalidArgumentTypeException($parameter, 'callable', $value);
+            throw new InvalidArgumentTypeException('callable', $parameter, $value);
         }
 
         if (!$refClass = $parameter->getClass()) {
@@ -86,7 +86,7 @@ class CallableArgumentsResolver
         }
 
         if (!is_object($value) || !$refClass->isInstance($value)) {
-            throw new InvalidArgumentTypeException($parameter, $refClass->name, $value);
+            throw new InvalidArgumentTypeException($refClass->name, $parameter, $value);
         }
     }
 }
