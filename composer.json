@@ -1,0 +1,27 @@
+{
+    "name": "rybakit/callable-arguments-resolver",
+    "description": "CallableArgumentsResolver allows you to determine the arguments to pass to the callable.",
+    "keywords": ["callable arguments resolver"],
+    "homepage": "https://github.com/rybakit/callable-arguments-resolver",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eugene Leonovich",
+            "email": "gen.work@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
