@@ -17,9 +17,26 @@ $ composer require rybakit/callable-arguments-resolver:~1.0@dev
 ## Usage example
 
 ```php
-$controller = function ($name) { return 'Hello '.$name; };
-$resolver = new CallableArgumentsResolver($controller);
-$arguments = $resolver->getArguments($_GET);
+$informer = function (User $user, $request, $greetingText = 'Hello, %s!', $ipText = 'Your IP address is %s.') {
+    printf($greetingText, $user->getName());
+    echo "\n";
+    printf($ipText, $request->getClientIp());
+};
+
+$parameters = [
+    Request::createFromGlobals(),
+    'ipText' => 'Your public IP address is %s.',
+    'Welcome, %!'
+    ['unused parameter'],
+    new User('Stranger'),
+];
+
+$resolver = new CallableArgumentsResolver($informer);
+
+call_user_func_array(
+    $resolver->getCallable(),
+    $resolver->resolve($parameters)
+);
 ```
 
 
