@@ -11,46 +11,43 @@ class CallableArgumentsResolver
     }
 
     /**
-     * @param array $parameters
+     * @param array $params
      *
      * @return array
      *
      * @throws \InvalidArgumentException
      */
-    public function resolve(array $parameters)
+    public function resolve(array $params)
     {
         $reflection = $this->getReflection();
 
-        if (count($parameters) < $reflection->getNumberOfRequiredParameters()) {
+        if (count($params) < $reflection->getNumberOfRequiredParameters()) {
             throw new \InvalidArgumentException('Not enough parameters are provided.');
         }
 
-        $refParameters = $reflection->getParameters();
-        usort($refParameters, 'sort_parameters');
+        $refParams = $reflection->getParameters();
+        usort($refParams, 'sort_parameters');
 
-        $arguments = [];
-        foreach ($refParameters as $parameter) {
-            $pos = $parameter->getPosition();
+        $args = [];
+        foreach ($refParams as $param) {
+            $pos = $param->getPosition();
+            $key = has_type($param) ? find_key_by_type($param, $params) : find_key($param, $params);
 
-            $found = has_type($parameter)
-                ? find_by_type($parameter, $parameters)
-                : find($parameter, $parameters);
-
-            if ($found) {
-                unset($parameters[$found[0]]);
-                $arguments[$pos] = $found[1];
+            if (null !== $key) {
+                $args[$pos] = $params[$key];
+                unset($params[$key]);
                 continue;
             }
 
-            if ($parameter->isDefaultValueAvailable()) {
-                $arguments[$pos] = $parameter->getDefaultValue();
+            if ($param->isDefaultValueAvailable()) {
+                $args[$pos] = $param->getDefaultValue();
                 continue;
             }
 
-            throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s.', $parameter->name ? '$'.$parameter->name : '#'.$pos));
+            throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s.', $param->name ? '$'.$param->name : '#'.$pos));
         }
 
-        return $arguments;
+        return $args;
     }
 
     protected function getReflection()

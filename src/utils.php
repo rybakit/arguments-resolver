@@ -46,82 +46,82 @@ function sort_parameters(\ReflectionParameter $a, \ReflectionParameter $b)
 }
 
 /**
- * @param ReflectionParameter $parameter
- * @param array               $parameters
+ * @param ReflectionParameter $param
+ * @param array               $params
  *
- * @return array|false
+ * @return mixed
  */
-function find(\ReflectionParameter $parameter, array $parameters)
+function find_key(\ReflectionParameter $param, array $params)
 {
-    if (!$parameters) {
-        return false;
+    if (!$params) {
+        return;
     }
 
-    if (array_key_exists($parameter->name, $parameters)) {
-        return [$parameter->name, $parameters[$parameter->name]];
+    if (array_key_exists($param->name, $params)) {
+        return $param->name;
     }
 
-    $value = reset($parameters);
+    reset($params);
 
-    return [key($parameters), $value];
+    return key($params);
 }
 
 /**
- * @param ReflectionParameter $parameter
- * @param array               $parameters
+ * @param ReflectionParameter $param
+ * @param array               $params
  *
- * @return array|false
+ * @return mixed
  */
-function find_by_type(\ReflectionParameter $parameter, array $parameters)
+function find_key_by_type(\ReflectionParameter $param, array $params)
 {
-    $matched = false;
+    $found = null;
 
-    foreach ($parameters as $key => $value) {
-        if (!match_type($parameter, $value)) {
+    foreach ($params as $key => $value) {
+        if (!match_type($param, $value)) {
             continue;
         }
 
-        if ($key === $parameter->name) {
-            return [$key, $value];
+        if ($key === $param->name) {
+            return $key;
         }
 
-        if (!$matched) {
-            $matched = [$key, $value];
+        if (!$found) {
+            $found = $key;
         }
     }
 
-    return $matched;
+    return $found;
 }
 
 /**
- * @param ReflectionParameter $parameter
+ * @param ReflectionParameter $param
  *
  * @return bool
  */
-function has_type(\ReflectionParameter $parameter)
+function has_type(\ReflectionParameter $param)
 {
-    return $parameter->getClass() || $parameter->isArray() || $parameter->isCallable();
+    return $param->getClass() || $param->isArray() || $param->isCallable();
 }
 
 /**
- * @param ReflectionParameter $parameter
+ * @param ReflectionParameter $param
  * @param mixed               $value
  *
  * @return bool
  */
-function match_type(\ReflectionParameter $parameter, $value)
+function match_type(\ReflectionParameter $param, $value)
 {
-    $class = $parameter->getClass();
+    $class = $param->getClass();
 
     if ($class && is_object($value) && $class->isInstance($value)) {
         return true;
     }
 
-    if ($parameter->isArray() && is_array($value)) {
+    if ($param->isArray() && is_array($value)) {
         return true;
     }
 
-    if ($parameter->isCallable() && is_callable($value)) {
+    if ($param->isCallable() && is_callable($value)) {
         return true;
     }
 
