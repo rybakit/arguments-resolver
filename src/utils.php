@@ -46,22 +46,51 @@ function sort_parameters(\ReflectionParameter $a, \ReflectionParameter $b)
 }
 
 /**
- * @param array               $parameters
  * @param ReflectionParameter $parameter
+ * @param array               $parameters
  *
- * @return array
+ * @return array|false
  */
-function filter_by_type(array $parameters, \ReflectionParameter $parameter)
+function find(\ReflectionParameter $parameter, array $parameters)
 {
-    $result = [];
+    if (!$parameters) {
+        return false;
+    }
+
+    if (array_key_exists($parameter->name, $parameters)) {
+        return [$parameter->name, $parameters[$parameter->name]];
+    }
+
+    $value = reset($parameters);
+
+    return [key($parameters), $value];
+}
+
+/**
+ * @param ReflectionParameter $parameter
+ * @param array               $parameters
+ *
+ * @return array|false
+ */
+function find_by_type(\ReflectionParameter $parameter, array $parameters)
+{
+    $matched = false;
 
     foreach ($parameters as $key => $value) {
-        if (match_type($parameter, $value)) {
-            $result[$key] = $value;
+        if (!match_type($parameter, $value)) {
+            continue;
+        }
+
+        if ($key === $parameter->name) {
+            return [$key, $value];
+        }
+
+        if (!$matched) {
+            $matched = [$key, $value];
         }
     }
 
-    return $result;
+    return $matched;
 }
 
 /**

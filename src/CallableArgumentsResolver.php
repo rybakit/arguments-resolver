@@ -30,34 +30,15 @@ class CallableArgumentsResolver
 
         $arguments = [];
         foreach ($refParameters as $parameter) {
-            $name = $parameter->getName();
             $pos = $parameter->getPosition();
 
-            if ($typedParameters = filter_by_type($parameters, $parameter)) {
-                if (array_key_exists($name, $typedParameters)) {
-                    $value = $typedParameters[$name];
-                    unset($parameters[$name]);
-                } else {
-                    $value = reset($typedParameters);
-                    $key = key($typedParameters);
-                    unset($parameters[$key]);
-                }
+            $found = has_type($parameter)
+                ? find_by_type($parameter, $parameters)
+                : find($parameter, $parameters);
 
-                $arguments[$pos] = $value;
-                continue;
-            }
-
-            if ($parameters && !has_type($parameter)) {
-                if (array_key_exists($name, $parameters)) {
-                    $value = $parameters[$name];
-                    unset($parameters[$name]);
-                } else {
-                    $value = reset($parameters);
-                    $key = key($parameters);
-                    unset($parameters[$key]);
-                }
-
-                $arguments[$pos] = $value;
+            if ($found) {
+                unset($parameters[$found[0]]);
+                $arguments[$pos] = $found[1];
                 continue;
             }
 
