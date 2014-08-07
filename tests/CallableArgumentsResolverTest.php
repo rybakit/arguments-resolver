@@ -16,7 +16,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
         $parameters = ['foo', new \stdClass(), ['baz'], 'qux'];
 
-        $this->assertEquals($parameters, $resolver->getArguments($parameters));
+        $this->assertEquals($parameters, $resolver->resolve($parameters));
     }
 
     /**
@@ -33,7 +33,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['foo', 'qux', $baz, $bar];
         $arguments = ['foo', $bar, $baz, 'qux'];
 
-        $this->assertEquals($arguments, $resolver->getArguments($parameters));
+        $this->assertEquals($arguments, $resolver->resolve($parameters));
     }
 
     /**
@@ -47,7 +47,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['foo', new \stdClass()];
         $arguments = array_merge($parameters, [[], null]);
 
-        $this->assertEquals($arguments, $resolver->getArguments($parameters));
+        $this->assertEquals($arguments, $resolver->resolve($parameters));
     }
 
     /**
@@ -64,7 +64,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['qux' => 'qux', 'baz' => $baz, 'bar' => $bar, 'foo' => 'foo'];
         $arguments = ['foo', $bar, $baz, 'qux'];
 
-        $this->assertEquals($arguments, $resolver->getArguments($parameters));
+        $this->assertEquals($arguments, $resolver->resolve($parameters));
     }
 
     /**
@@ -81,7 +81,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['bar' => $bar, $foo];
         $arguments = [$foo, $bar, [], null];
 
-        $this->assertEquals($arguments, $resolver->getArguments($parameters));
+        $this->assertEquals($arguments, $resolver->resolve($parameters));
     }
 
     /**
@@ -94,7 +94,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
         $parameters = ['foo'];
 
-        $this->assertEquals([], $resolver->getArguments($parameters));
+        $this->assertEquals([], $resolver->resolve($parameters));
     }
 
     /**
@@ -107,7 +107,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
         $parameters = [[1, 2], 'foo'];
 
-        $this->assertEquals([[1, 2]], $resolver->getArguments($parameters));
+        $this->assertEquals([[1, 2]], $resolver->resolve($parameters));
     }
 
     /**
@@ -121,7 +121,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $foo = function () {};
         $parameters = [$foo, 'bar'];
 
-        $this->assertEquals([$foo], $resolver->getArguments($parameters));
+        $this->assertEquals([$foo], $resolver->resolve($parameters));
     }
 
     /**
@@ -135,7 +135,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $foo = new \stdClass();
         $parameters = [$foo, 'bar'];
 
-        $this->assertEquals([$foo], $resolver->getArguments($parameters));
+        $this->assertEquals([$foo], $resolver->resolve($parameters));
     }
 
     /**
@@ -146,7 +146,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolvingThrowsExceptionOnInvalidType(callable $callable, $parameters)
     {
         $resolver = new CallableArgumentsResolver($callable);
-        $resolver->getArguments($parameters);
+        $resolver->resolve($parameters);
     }
 
     /**
@@ -157,7 +157,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolvingThrowsExceptionOnEmptyParameters(callable $callable)
     {
         $resolver = new CallableArgumentsResolver($callable);
-        $resolver->getArguments([]);
+        $resolver->resolve([]);
     }
 
     public function provideCallableDataWithInvalidTypes()
@@ -188,7 +188,9 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['method'],
+            ['static_method'],
             ['invoked_method'],
+            ['closure'],
             ['function'],
         ];
     }
