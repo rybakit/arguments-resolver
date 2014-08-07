@@ -18,6 +18,8 @@ function create_callable($type, $mode)
         case 'function':
             return 'function_'.$mode;
     }
+
+    throw new \InvalidArgumentException(sprintf('Unsupported callable type "%s".', $type));
 }
 
 function camelize($string)
