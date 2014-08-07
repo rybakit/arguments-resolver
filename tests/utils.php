@@ -8,7 +8,6 @@ function create_callable($type, $mode)
 
         case 'invoked_method':
             return (new ReflectionClass('Invoke'.camelize($mode).'Class'))->newInstance();
-            //return new ('Invoke'.camelize($mode).'Class')();
 
         case 'function':
             return 'function_'.$mode;
