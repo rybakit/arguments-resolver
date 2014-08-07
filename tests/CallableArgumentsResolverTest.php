@@ -141,11 +141,23 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideCallableDataWithInvalidTypes
      * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Unable to resolve argument
      */
     public function testResolvingThrowsExceptionOnInvalidType(callable $callable, $parameters)
     {
         $resolver = new CallableArgumentsResolver($callable);
         $resolver->getArguments($parameters);
+    }
+
+    /**
+     * @dataProvider provideCallableDataWithRequiredArguments
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Not enough parameters are provided
+     */
+    public function testResolvingThrowsExceptionOnEmptyParameters(callable $callable)
+    {
+        $resolver = new CallableArgumentsResolver($callable);
+        $resolver->getArguments([]);
     }
 
     public function provideCallableDataWithInvalidTypes()
@@ -159,16 +171,6 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         }
 
         return $data;
-    }
-
-    /**
-     * @dataProvider provideCallableDataWithRequiredArguments
-     * @expectedException InvalidArgumentException
-     */
-    public function testResolvingThrowsExceptionOnEmptyParameters(callable $callable)
-    {
-        $resolver = new CallableArgumentsResolver($callable);
-        $resolver->getArguments([]);
     }
 
     public function provideCallableDataWithRequiredArguments()
