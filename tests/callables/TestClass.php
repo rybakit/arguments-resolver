@@ -6,7 +6,7 @@ class TestClass
     {
     }
 
-    public function methodWithArguments($foo, $bar, $baz = null)
+    public function methodWithArguments($foo, \stdClass $bar, array $baz = [], $qux = null)
     {
     }
 

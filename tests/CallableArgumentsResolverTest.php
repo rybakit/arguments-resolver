@@ -1,96 +1,193 @@
 <?php
 
+/**
+ * @see https://bugs.php.net/bug.php?id=50798
+ * @see https://bugs.php.net/bug.php?id=67454
+ */
 class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider provideCallableData
+     * @dataProvider provideCallableTypes
      */
-    public function testGetArguments(callable $callable, $values, $arguments)
+    public function testResolvingAllOrdered($callableType)
     {
+        $callable = create_callable($callableType, 'with_arguments');
         $resolver = new CallableArgumentsResolver($callable);
-        $this->assertEquals($arguments, $resolver->getArguments($values));
+
+        $parameters = ['foo', new \stdClass(), ['baz'], 'qux'];
+
+        $this->assertEquals($parameters, $resolver->getArguments($parameters));
     }
 
-    public function provideCallableData()
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingAllUnordered($callableType)
     {
-        $object = new \stdClass();
-        $testClass = new TestClass();
+        $callable = create_callable($callableType, 'with_arguments');
+        $resolver = new CallableArgumentsResolver($callable);
 
-        return [
-            [[$testClass, 'methodWithoutArguments'], [], []],
-            [[$testClass, 'methodWithArguments'], [1, 2], [1, 2]],
-            [[$testClass, 'methodWithArguments'], [1, 2, 3], [1, 2, 3]],
-            [[$testClass, 'methodWithArguments'], [2, 'foo' => 1], [1, 2]],
-            [[$testClass, 'methodWithArguments'], ['bar' => 2, 'foo' => 1], [1, 2]],
-            [[$testClass, 'methodWithArguments'], [1, 2, 'baz' => 3], [1, 2, 3]],
-            [[$testClass, 'methodWithArrayArgument'], [[1, 2]], [[1, 2]]],
-            [[$testClass, 'methodWithCallableArgument'], ['rand'], ['rand']],
-            [[$testClass, 'methodWithObjectArgument'], [$object], [$object]],
+        $bar = new \stdClass();
+        $baz = ['baz'];
 
-            [function () {}, [], []],
-            [function ($foo, $bar, $baz = null) {}, [1, 2], [1, 2]],
-            [function ($foo, $bar, $baz = null) {}, [1, 2, 3], [1, 2, 3]],
-            [function ($foo, $bar, $baz = null) {}, [2, 'foo' => 1], [1, 2]],
-            [function ($foo, $bar, $baz = null) {}, ['bar' => 2, 'foo' => 1], [1, 2]],
-            [function ($foo, $bar, $baz = null) {}, [1, 2, 'baz' => 3], [1, 2, 3]],
-            [function (array $array) {}, [[1, 2]], [[1, 2]]],
-            [function (callable $callable) {}, ['ord'], ['ord']],
-            [function (\stdClass $object) {}, [$object], [$object]],
+        $parameters = ['foo', 'qux', $baz, $bar];
+        $arguments = ['foo', $bar, $baz, 'qux'];
 
-            ['rand', [], []],
-            ['fmod', [1, 2], [1, 2]],
-            ['array_sum', [[1, 2]], [[1, 2]]],
-            ['get_object_vars', [$object], [$object]],
-        ];
+        $this->assertEquals($arguments, $resolver->getArguments($parameters));
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingOptional($callableType)
+    {
+        $callable = create_callable($callableType, 'with_arguments');
+        $resolver = new CallableArgumentsResolver($callable);
+
+        $parameters = ['foo', new \stdClass()];
+        $arguments = array_merge($parameters, [[], null]);
+
+        $this->assertEquals($arguments, $resolver->getArguments($parameters));
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingByName($callableType)
+    {
+        $callable = create_callable($callableType, 'with_arguments');
+        $resolver = new CallableArgumentsResolver($callable);
+
+        $bar = new \stdClass();
+        $baz = ['baz'];
+
+        $parameters = ['qux' => 'qux', 'baz' => $baz, 'bar' => $bar, 'foo' => 'foo'];
+        $arguments = ['foo', $bar, $baz, 'qux'];
+
+        $this->assertEquals($arguments, $resolver->getArguments($parameters));
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingByNameAndType($callableType)
+    {
+        $callable = create_callable($callableType, 'with_arguments');
+        $resolver = new CallableArgumentsResolver($callable);
+
+        $foo = (object) ['name' => 'foo'];
+        $bar = (object) ['name' => 'bar'];
+
+        $parameters = ['bar' => $bar, $foo];
+        $arguments = [$foo, $bar, [], null];
+
+        $this->assertEquals($arguments, $resolver->getArguments($parameters));
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingWithoutArguments($callableType)
+    {
+        $callable = create_callable($callableType, 'without_arguments');
+        $resolver = new CallableArgumentsResolver($callable);
+
+        $parameters = ['foo'];
+
+        $this->assertEquals([], $resolver->getArguments($parameters));
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingArrayArgument($callableType)
+    {
+        $callable = create_callable($callableType, 'with_array_argument');
+        $resolver = new CallableArgumentsResolver($callable);
+
+        $parameters = [[1, 2], 'foo'];
+
+        $this->assertEquals([[1, 2]], $resolver->getArguments($parameters));
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingCallableArgument($callableType)
+    {
+        $callable = create_callable($callableType, 'with_callable_argument');
+        $resolver = new CallableArgumentsResolver($callable);
+
+        $foo = function () {};
+        $parameters = [$foo, 'bar'];
+
+        $this->assertEquals([$foo], $resolver->getArguments($parameters));
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingObjectArgument($callableType)
+    {
+        $callable = create_callable($callableType, 'with_object_argument');
+        $resolver = new CallableArgumentsResolver($callable);
+
+        $foo = new \stdClass();
+        $parameters = [$foo, 'bar'];
+
+        $this->assertEquals([$foo], $resolver->getArguments($parameters));
     }
 
     /**
      * @dataProvider provideCallableDataWithInvalidTypes
-     * @expectedException InvalidArgumentTypeException
+     * @expectedException InvalidArgumentException
      */
-    public function testGetArgumentsThrowsExceptionOnInvalidType(callable $callable, $values)
+    public function testResolvingThrowsExceptionOnInvalidType(callable $callable, $parameters)
     {
         $resolver = new CallableArgumentsResolver($callable);
-        $resolver->getArguments($values);
+        $resolver->getArguments($parameters);
     }
 
     public function provideCallableDataWithInvalidTypes()
     {
-        $testClass = new TestClass();
+        $data = [];
 
-        return [
-            [[$testClass, 'methodWithArrayArgument'], [null]],
-            [[$testClass, 'methodWithCallableArgument'], [null]],
-            [[$testClass, 'methodWithObjectArgument'], [null]],
+        foreach ($this->provideCallableTypes() as $type) {
+            $data[] = [create_callable($type[0], 'with_array_argument'), [null]];
+            $data[] = [create_callable($type[0], 'with_callable_argument'), [null]];
+            $data[] = [create_callable($type[0], 'with_object_argument'), [null]];
+        }
 
-            [function (array $array) {}, [null]],
-            [function (callable $callable) {}, [null]],
-            [function (\stdClass $object) {}, [null]],
-
-            // @see https://bugs.php.net/bug.php?id=67454
-            //['array_sum', [null]],
-            //['get_object_vars', [null]],
-        ];
+        return $data;
     }
 
     /**
-     * @dataProvider provideCallableDataWithEmptyParameters
+     * @dataProvider provideCallableDataWithRequiredArguments
      * @expectedException InvalidArgumentException
      */
-    public function testGetArgumentsThrowsExceptionOnEmptyParameters(callable $callable, $values)
+    public function testResolvingThrowsExceptionOnEmptyParameters(callable $callable)
     {
         $resolver = new CallableArgumentsResolver($callable);
-        $resolver->getArguments($values);
+        $resolver->getArguments([]);
     }
 
-    public function provideCallableDataWithEmptyParameters()
+    public function provideCallableDataWithRequiredArguments()
     {
-        $testClass = new TestClass();
+        $data = [];
 
+        foreach ($this->provideCallableTypes() as $type) {
+            $data[] = [create_callable($type[0], 'with_arguments')];
+        }
+
+        return $data;
+    }
+
+    public function provideCallableTypes()
+    {
         return [
-            [[$testClass, 'methodWithArguments'], []],
-            [function ($foo) {}, []],
-            ['ord', []],
+            ['method'],
+            ['invoked_method'],
+            ['function'],
         ];
     }
 }
