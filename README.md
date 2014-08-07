@@ -17,14 +17,14 @@ $ composer require rybakit/callable-arguments-resolver:~1.0@dev
 ## Usage example
 
 ```php
-$informer = function ($username, Request $request, $greeting = 'Hello, %s!') {
+$informer = function ($username, Request $request, $greeting = 'Hello %s!') {
     printf($greeting, $user->getName());
     printf("\nYour IP address is %s.", $request->getClientIp());
 };
 
 $parameters = [
     Request::createFromGlobals(),
-    'Welcome, %!'
+    'Welcome %!'
     ['unused parameter'],
     'username' => 'Stranger',
 ];
