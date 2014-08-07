@@ -133,6 +133,17 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $resolver->resolve([]);
     }
 
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testRetrievingCallable($callableType)
+    {
+        $callable = create_callable($callableType, 'without_arguments');
+        $resolver = new CallableArgumentsResolver($callable);
+
+        $this->assertEquals($callable, $resolver->getCallable());
+    }
+
     public function provideCallableDataWithInvalidTypes()
     {
         $data = [];

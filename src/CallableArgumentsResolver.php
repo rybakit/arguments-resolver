@@ -10,6 +10,11 @@ class CallableArgumentsResolver
         $this->callable = $callable;
     }
 
+    public function getCallable()
+    {
+        return $this->callable;
+    }
+
     /**
      * @param array $params
      *
