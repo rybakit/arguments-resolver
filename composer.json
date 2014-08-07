@@ -17,7 +17,10 @@
     "autoload": {
         "psr-4": {
             "": "src/"
-        }
+        },
+        "files": [
+            "src/utils.php"
+        ]
     },
     "extra": {
         "branch-alias": {
