@@ -9,9 +9,9 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideCallableTypes
      */
-    public function testResolvingAllOrdered($callableType)
+    public function testResolvingVariousOrdered($callableType)
     {
-        $callable = create_callable($callableType, 'with_arguments');
+        $callable = create_callable($callableType, 'with_various');
         $resolver = new CallableArgumentsResolver($callable);
 
         $parameters = ['foo', new \stdClass(), ['baz'], 'qux'];
@@ -22,9 +22,9 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideCallableTypes
      */
-    public function testResolvingAllUnordered($callableType)
+    public function testResolvingVariousUnordered($callableType)
     {
-        $callable = create_callable($callableType, 'with_arguments');
+        $callable = create_callable($callableType, 'with_various');
         $resolver = new CallableArgumentsResolver($callable);
 
         $bar = new \stdClass();
@@ -39,9 +39,9 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideCallableTypes
      */
-    public function testResolvingOptional($callableType)
+    public function testResolvingVariousOptional($callableType)
     {
-        $callable = create_callable($callableType, 'with_arguments');
+        $callable = create_callable($callableType, 'with_various');
         $resolver = new CallableArgumentsResolver($callable);
 
         $parameters = ['foo', new \stdClass()];
@@ -53,9 +53,9 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideCallableTypes
      */
-    public function testResolvingByName($callableType)
+    public function testResolvingVariousByName($callableType)
     {
-        $callable = create_callable($callableType, 'with_arguments');
+        $callable = create_callable($callableType, 'with_various');
         $resolver = new CallableArgumentsResolver($callable);
 
         $bar = new \stdClass();
@@ -70,9 +70,9 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideCallableTypes
      */
-    public function testResolvingByNameAndType($callableType)
+    public function testResolvingVariousByNameAndType($callableType)
     {
-        $callable = create_callable($callableType, 'with_arguments');
+        $callable = create_callable($callableType, 'with_various');
         $resolver = new CallableArgumentsResolver($callable);
 
         $foo = (object) ['name' => 'foo'];
@@ -80,6 +80,20 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
         $parameters = ['bar' => $bar, $foo];
         $arguments = [$foo, $bar, [], null];
+
+        $this->assertEquals($arguments, $resolver->resolve($parameters));
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingOptional($callableType)
+    {
+        $callable = create_callable($callableType, 'with_optional');
+        $resolver = new CallableArgumentsResolver($callable);
+
+        $parameters = ['foo', 'bar'];
+        $arguments = array_merge($parameters, [1, 2]);
 
         $this->assertEquals($arguments, $resolver->resolve($parameters));
     }
@@ -95,47 +109,6 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['foo'];
 
         $this->assertEquals([], $resolver->resolve($parameters));
-    }
-
-    /**
-     * @dataProvider provideCallableTypes
-     */
-    public function testResolvingArrayArgument($callableType)
-    {
-        $callable = create_callable($callableType, 'with_array_argument');
-        $resolver = new CallableArgumentsResolver($callable);
-
-        $parameters = [[1, 2], 'foo'];
-
-        $this->assertEquals([[1, 2]], $resolver->resolve($parameters));
-    }
-
-    /**
-     * @dataProvider provideCallableTypes
-     */
-    public function testResolvingCallableArgument($callableType)
-    {
-        $callable = create_callable($callableType, 'with_callable_argument');
-        $resolver = new CallableArgumentsResolver($callable);
-
-        $foo = function () {};
-        $parameters = [$foo, 'bar'];
-
-        $this->assertEquals([$foo], $resolver->resolve($parameters));
-    }
-
-    /**
-     * @dataProvider provideCallableTypes
-     */
-    public function testResolvingObjectArgument($callableType)
-    {
-        $callable = create_callable($callableType, 'with_object_argument');
-        $resolver = new CallableArgumentsResolver($callable);
-
-        $foo = new \stdClass();
-        $parameters = [$foo, 'bar'];
-
-        $this->assertEquals([$foo], $resolver->resolve($parameters));
     }
 
     /**
@@ -165,9 +138,9 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $data = [];
 
         foreach ($this->provideCallableTypes() as $type) {
-            $data[] = [create_callable($type[0], 'with_array_argument'), [null]];
-            $data[] = [create_callable($type[0], 'with_callable_argument'), [null]];
-            $data[] = [create_callable($type[0], 'with_object_argument'), [null]];
+            $data[] = [create_callable($type[0], 'with_array'), [null, null, null]];
+            $data[] = [create_callable($type[0], 'with_callable'), [null, null, null]];
+            $data[] = [create_callable($type[0], 'with_object'), [null, null, null]];
         }
 
         return $data;
@@ -178,7 +151,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $data = [];
 
         foreach ($this->provideCallableTypes() as $type) {
-            $data[] = [create_callable($type[0], 'with_arguments')];
+            $data[] = [create_callable($type[0], 'with_various')];
         }
 
         return $data;

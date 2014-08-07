@@ -6,19 +6,23 @@ class TestClass
     {
     }
 
-    public function methodWithArguments($foo, \stdClass $bar, array $baz = [], $qux = null)
+    public function methodWithVarious($foo, \stdClass $bar, array $baz = [], $qux = null)
     {
     }
 
-    public function methodWithArrayArgument(array $array)
+    public function methodWithArray($mixed1, array $array, $mixed2)
     {
     }
 
-    public function methodWithCallableArgument(callable $callable)
+    public function methodWithCallable($mixed1, callable $callable, $mixed2)
     {
     }
 
-    public function methodWithObjectArgument(\stdClass $object)
+    public function methodWithObject($mixed1, \stdClass $object, $mixed2)
+    {
+    }
+
+    public function methodWithOptional($mixed1, $mixed2, $optional1 = 1, $optional1 = 2)
     {
     }
 
@@ -26,19 +30,23 @@ class TestClass
     {
     }
 
-    public static function staticMethodWithArguments($foo, \stdClass $bar, array $baz = [], $qux = null)
+    public static function staticMethodWithVarious($foo, \stdClass $bar, array $baz = [], $qux = null)
     {
     }
 
-    public static function staticMethodWithArrayArgument(array $array)
+    public static function staticMethodWithArray($mixed1, array $array, $mixed2)
     {
     }
 
-    public static function staticMethodWithCallableArgument(callable $callable)
+    public static function staticMethodWithCallable($mixed1, callable $callable, $mixed2)
     {
     }
 
-    public static function staticMethodWithObjectArgument(\stdClass $object)
+    public static function staticMethodWithObject($mixed1, \stdClass $object, $mixed2)
+    {
+    }
+
+    public static function staticMethodWithOptional($mixed1, $mixed2, $optional1 = 1, $optional1 = 2)
     {
     }
 }
