@@ -18,7 +18,7 @@ $ composer require rybakit/callable-arguments-resolver:~1.0@dev
 
 ```php
 $informer = function ($username, Request $request, $greeting = 'Hello %s!') {
-    printf($greeting, $user->getName());
+    printf($greeting, $username);
     printf("\nYour IP address is %s.", $request->getClientIp());
 };
 
