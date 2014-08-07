@@ -17,36 +17,86 @@ class CallableArgumentsResolver
      *
      * @throws \InvalidArgumentException
      */
-    public function getArguments(array $parameters)
+    public function resolve(array $parameters)
     {
         $reflection = $this->getReflection();
 
         if (count($parameters) < $reflection->getNumberOfRequiredParameters()) {
-            throw new \InvalidArgumentException('Not enough parameters provided.');
+            throw new \InvalidArgumentException('Not enough parameters are provided.');
         }
 
-        $arguments = [];
+        $reflParameters = $reflection->getParameters();
+        usort($reflParameters, [$this, 'sortParameters']);
 
-        foreach ($reflection->getParameters() as $parameter) {
-            if (empty($parameters)) {
-                break;
+        $arguments = [];
+        foreach ($reflParameters as $parameter) {
+            $matched = [];
+            foreach ($parameters as $key => $value) {
+                if (static::matchArgumentType($parameter, $value)) {
+                    $matched[$key] = $value;
+                }
             }
 
-            $name = $parameter->name;
+            $name = $parameter->getName();
+            $pos = $parameter->getPosition();
 
-            if (array_key_exists($name, $parameters)) {
-                $value = $parameters[$name];
+            if (!$matched) {
+                if ($parameters && !$parameter->getClass() && !$parameter->isCallable() && !$parameter->isArray()) {
+                    if (array_key_exists($name, $parameters)) {
+                        $value = $parameters[$name];
+                        unset($parameters[$name]);
+                    } else {
+                        $value = reset($parameters);
+                        $key = key($parameters);
+                        unset($parameters[$key]);
+                    }
+
+                    $arguments[$pos] = $value;
+                    continue;
+                }
+
+                if ($parameter->isDefaultValueAvailable()) {
+                    $arguments[$pos] = $parameter->getDefaultValue();
+                    continue;
+                }
+
+                throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s.', $parameter->name ? '$'.$parameter->name : '#'.$pos));
+            }
+
+            if (array_key_exists($name, $matched)) {
+                $value = $matched[$name];
                 unset($parameters[$name]);
             } else {
-                $value = array_shift($parameters);
+                $value = reset($matched);
+                $key = key($matched);
+                unset($parameters[$key]);
             }
 
-            static::assertArgument($parameter, $value);
-
-            $arguments[] = $value;
+            $arguments[$pos] = $value;
         }
 
         return $arguments;
+    }
+
+    public function sortParameters(ReflectionParameter $a, ReflectionParameter $b)
+    {
+        if ($a->isOptional() ^ $b->isOptional()) {
+            return (($a->isOptional() > $b->isOptional()) << 1) - 1;
+        }
+        if ($a->getClass() && !$b->getClass()) {
+            return -1;
+        }
+        if (!$a->getClass() && $b->getClass()) {
+            return 1;
+        }
+        if ($a->isArray() ^ $b->isArray()) {
+            return (($a->isArray() < $b->isArray()) << 1) - 1;
+        }
+        if ($a->isCallable() ^ $b->isCallable()) {
+            return (($a->isCallable() < $b->isCallable()) << 1) - 1;
+        }
+
+        return $a->getPosition() - $b->getPosition();
     }
 
     protected function getReflection()
@@ -71,22 +121,22 @@ class CallableArgumentsResolver
         return new \ReflectionFunction($this->callable);
     }
 
-    protected static function assertArgument(\ReflectionParameter $parameter, $value)
+    protected static function matchArgumentType(\ReflectionParameter $parameter, $value)
     {
-        if ($parameter->isArray() && !is_array($value)) {
-            throw new InvalidArgumentTypeException('array', $parameter, $value);
+        $refClass = $parameter->getClass();
+
+        if ($refClass && is_object($value) && $refClass->isInstance($value)) {
+            return true;
         }
 
-        if ($parameter->isCallable() && !is_callable($value)) {
-            throw new InvalidArgumentTypeException('callable', $parameter, $value);
+        if ($parameter->isArray() && is_array($value)) {
+            return true;
         }
 
-        if (!$refClass = $parameter->getClass()) {
-            return;
+        if ($parameter->isCallable() && is_callable($value)) {
+            return true;
         }
 
-        if (!is_object($value) || !$refClass->isInstance($value)) {
-            throw new InvalidArgumentTypeException($refClass->name, $parameter, $value);
-        }
+        return false;
     }
 }
