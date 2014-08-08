@@ -62,6 +62,8 @@ class CallableArgumentsResolver
             throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s.', $parameter->getPrettyName()));
         }
 
+        ksort($arguments);
+
         return $arguments;
     }
 
