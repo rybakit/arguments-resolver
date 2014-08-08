@@ -1,11 +1,13 @@
 <?php
 
+namespace CallableArgumentsResolver;
+
 /**
  * Creates a reflection for the callable.
  *
  * @param callable $callable
  *
- * @return ReflectionFunction|ReflectionMethod
+ * @return \ReflectionFunction|\ReflectionMethod
  */
 function create_reflection(callable $callable)
 {
@@ -23,14 +25,14 @@ function create_reflection(callable $callable)
 /**
  * Returns a generator of sorted parameters ordered by typehint and optionality.
  *
- * @param ReflectionFunctionAbstract $reflection
+ * @param \ReflectionFunctionAbstract $reflection
  *
- * @return Generator
+ * @return \Generator
  */
 function get_parameters(\ReflectionFunctionAbstract $reflection)
 {
     $parameters = $reflection->getParameters();
-    usort($parameters, 'sort_parameters');
+    usort($parameters, 'CallableArgumentsResolver\\sort_parameters');
 
     foreach ($parameters as $parameter) {
         yield new ReflectionParameterWrapper($parameter);
@@ -40,8 +42,8 @@ function get_parameters(\ReflectionFunctionAbstract $reflection)
 /**
  * Sorts parameters.
  *
- * @param ReflectionParameter $a
- * @param ReflectionParameter $b
+ * @param \ReflectionParameter $a
+ * @param \ReflectionParameter $b
  *
  * @return int
  */

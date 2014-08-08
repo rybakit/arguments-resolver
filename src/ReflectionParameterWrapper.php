@@ -1,9 +1,11 @@
 <?php
 
+namespace CallableArgumentsResolver;
+
 class ReflectionParameterWrapper
 {
     /**
-     * @var ReflectionParameter
+     * @var \ReflectionParameter
      */
     private $reflection;
 
@@ -15,7 +17,7 @@ class ReflectionParameterWrapper
     /**
      * Returns the parameter being wrapped.
      *
-     * @return ReflectionParameter
+     * @return \ReflectionParameter
      */
     public function getReflection()
     {

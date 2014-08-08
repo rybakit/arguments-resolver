@@ -1,5 +1,7 @@
 <?php
 
+namespace CallableArgumentsResolver\Tests;
+
 function function_without_arguments()
 {
 }

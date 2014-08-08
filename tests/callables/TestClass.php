@@ -1,5 +1,7 @@
 <?php
 
+namespace CallableArgumentsResolver\Tests;
+
 class TestClass
 {
     public function methodWithoutArguments()

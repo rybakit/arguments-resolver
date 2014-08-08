@@ -17,6 +17,8 @@ $ composer require rybakit/callable-arguments-resolver:~1.0@dev
 ## Usage example
 
 ```php
+use CallableArgumentsResolver\CallableArgumentsResolver;
+
 $informer = function ($username, DateTime $lastLoginDate, $greeting = 'Hello %s!') {
     printf($greeting, $username);
     printf("\nYour last login was on the %s.", $lastLoginDate->format('jS \of F Y'));

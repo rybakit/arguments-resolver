@@ -1,5 +1,9 @@
 <?php
 
+namespace CallableArgumentsResolver\Tests;
+
+use CallableArgumentsResolver\CallableArgumentsResolver;
+
 /**
  * @see https://bugs.php.net/bug.php?id=50798
  * @see https://bugs.php.net/bug.php?id=67454
@@ -113,7 +117,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideCallableDataWithInvalidTypes
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unable to resolve argument
      */
     public function testResolvingThrowsExceptionOnInvalidType(callable $callable, $parameters)
@@ -124,7 +128,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideCallableDataWithRequiredArguments
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Not enough parameters are provided
      */
     public function testResolvingThrowsExceptionOnEmptyParameters(callable $callable)

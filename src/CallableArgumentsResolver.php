@@ -1,5 +1,7 @@
 <?php
 
+namespace CallableArgumentsResolver;
+
 class CallableArgumentsResolver
 {
     /**
