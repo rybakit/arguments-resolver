@@ -38,6 +38,22 @@ call_user_func_array(
 ```
 
 
+## Tests
+
+CallableArgumentsResolver uses [PHPUnit](http://phpunit.de) for unit testing.
+In order to run the tests, you'll first need to setup the test suite using composer:
+
+```sh
+$ composer install
+```
+
+You can then run the tests:
+
+```sh
+$ phpunit
+```
+
+
 ## License
 
 CallableArgumentsResolver is released under the MIT License. See the bundled [LICENSE](LICENSE) file for details.
