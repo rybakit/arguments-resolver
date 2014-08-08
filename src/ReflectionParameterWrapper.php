@@ -13,7 +13,7 @@ class ReflectionParameterWrapper
     }
 
     /**
-     * Returns the wrapped parameter.
+     * Returns the parameter being wrapped.
      *
      * @return ReflectionParameter
      */
