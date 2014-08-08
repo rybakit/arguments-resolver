@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * Creates a reflection for the callable.
+ *
  * @param callable $callable
  *
  * @return ReflectionFunction|ReflectionMethod
@@ -19,6 +21,25 @@ function create_reflection(callable $callable)
 }
 
 /**
+ * Returns a generator of sorted parameters ordered by typehint and optionality.
+ *
+ * @param ReflectionFunctionAbstract $reflection
+ *
+ * @return Generator
+ */
+function get_parameters(\ReflectionFunctionAbstract $reflection)
+{
+    $parameters = $reflection->getParameters();
+    usort($parameters, 'sort_parameters');
+
+    foreach ($parameters as $parameter) {
+        yield new ReflectionParameterWrapper($parameter);
+    }
+}
+
+/**
+ * Sorts parameters.
+ *
  * @param ReflectionParameter $a
  * @param ReflectionParameter $b
  *
@@ -43,87 +64,4 @@ function sort_parameters(\ReflectionParameter $a, \ReflectionParameter $b)
     }
 
     return $a->getPosition() - $b->getPosition();
-}
-
-/**
- * @param ReflectionParameter $param
- * @param array               $params
- *
- * @return mixed
- */
-function find_key(\ReflectionParameter $param, array $params)
-{
-    if (!$params) {
-        return;
-    }
-
-    if (array_key_exists($param->name, $params)) {
-        return $param->name;
-    }
-
-    reset($params);
-
-    return key($params);
-}
-
-/**
- * @param ReflectionParameter $param
- * @param array               $params
- *
- * @return mixed
- */
-function find_key_by_type(\ReflectionParameter $param, array $params)
-{
-    $found = null;
-
-    foreach ($params as $key => $value) {
-        if (!match_type($param, $value)) {
-            continue;
-        }
-
-        if ($key === $param->name) {
-            return $key;
-        }
-
-        if (!$found) {
-            $found = $key;
-        }
-    }
-
-    return $found;
-}
-
-/**
- * @param ReflectionParameter $param
- *
- * @return bool
- */
-function has_type(\ReflectionParameter $param)
-{
-    return $param->getClass() || $param->isArray() || $param->isCallable();
-}
-
-/**
- * @param ReflectionParameter $param
- * @param mixed               $value
- *
- * @return bool
- */
-function match_type(\ReflectionParameter $param, $value)
-{
-    $class = $param->getClass();
-
-    if ($class && is_object($value) && $class->isInstance($value)) {
-        return true;
-    }
-
-    if ($param->isArray() && is_array($value)) {
-        return true;
-    }
-
-    if ($param->isCallable() && is_callable($value)) {
-        return true;
-    }
-
-    return false;
 }
