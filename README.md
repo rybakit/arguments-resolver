@@ -17,13 +17,13 @@ $ composer require rybakit/callable-arguments-resolver:~1.0@dev
 ## Usage example
 
 ```php
-$informer = function ($username, Request $request, $greeting = 'Hello %s!') {
+$informer = function ($username, DateTime $lastLoginDate, $greeting = 'Hello %s!') {
     printf($greeting, $username);
-    printf("\nYour IP address is %s.", $request->getClientIp());
+    printf("\nYour last login was on the %s.", $lastLoginDate->format('jS \of F Y'));
 };
 
 $parameters = [
-    Request::createFromGlobals(),
+    new DateTime(),
     'Welcome %!'
     ['unused parameter'],
     'username' => 'Stranger',
@@ -35,6 +35,13 @@ call_user_func_array(
     $resolver->getCallable(),
     $resolver->resolve($parameters)
 );
+```
+
+The above example will output something similar to:
+
+```
+Welcome Stranger!
+Your last login was on the 8th of August 2014.
 ```
 
 
