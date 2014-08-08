@@ -24,7 +24,7 @@ $informer = function ($username, DateTime $lastLoginDate, $greeting = 'Hello %s!
 
 $parameters = [
     new DateTime(),
-    'Welcome %!'
+    'Welcome %s!',
     ['unused parameter'],
     'username' => 'Stranger',
 ];
