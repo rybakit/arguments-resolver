@@ -16,7 +16,7 @@ class ReflectorParameterWrapperTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->reflection = new \ReflectionParameter(__NAMESPACE__.'\\function_with_array', 1);
+        $this->reflection = new \ReflectionParameter(__NAMESPACE__.'\function_with_array', 1);
     }
 
     public function testGettingReflection()
@@ -33,15 +33,21 @@ class ReflectorParameterWrapperTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckingDefaultValueAvailability()
     {
-        $reflection = new \ReflectionParameter(__NAMESPACE__.'\\function_with_optional', 2);
+        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_with_optional', 2);
         $parameter = new ReflectionParameterWrapper($reflection);
         $this->assertTrue($parameter->isDefaultValueAvailable());
     }
 
     public function testGettingDefaultValue()
     {
-        $reflection = new \ReflectionParameter(__NAMESPACE__.'\\function_with_optional', 2);
+        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_with_optional', 2);
         $parameter = new ReflectionParameterWrapper($reflection);
         $this->assertEquals(1, $parameter->getDefaultValue());
+    }
+
+    public function testGettingPrettyName()
+    {
+        $parameter = new ReflectionParameterWrapper($this->reflection);
+        $this->assertEquals('$array (#1)', $parameter->getPrettyName());
     }
 }
