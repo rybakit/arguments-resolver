@@ -32,7 +32,7 @@ function create_reflection(callable $callable)
 function get_parameters(\ReflectionFunctionAbstract $reflection)
 {
     $parameters = $reflection->getParameters();
-    usort($parameters, 'CallableArgumentsResolver\\sort_parameters');
+    usort($parameters, 'CallableArgumentsResolver\sort_parameters');
 
     foreach ($parameters as $parameter) {
         yield new ReflectionParameterWrapper($parameter);
