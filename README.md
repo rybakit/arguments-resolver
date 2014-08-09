@@ -29,8 +29,9 @@ $informer = function ($username, DateTime $lastLoginDate, $greeting = 'Hello %s!
 $parameters = [
     new DateTime(),
     'Welcome %s!',
-    ['unused parameter'],
+    ['not an argument'],
     'username' => 'Stranger',
+    'not an argument',
 ];
 
 $resolver = new CallableArgumentsResolver($informer);
