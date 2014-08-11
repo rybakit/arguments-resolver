@@ -10,7 +10,7 @@ class CallableArgumentsResolver
     private $callable;
 
     /**
-     * @var \ReflectionFunctionAbstract
+     * @var CallableReflection
      */
     private $reflection;
 
@@ -30,21 +30,19 @@ class CallableArgumentsResolver
     }
 
     /**
-     * Returns an array of arguments.
+     * Resolves callable arguments.
      *
      * @param array $parameters
      *
      * @return array
-     *
-     * @throws \InvalidArgumentException
      */
     public function resolveArguments(array $parameters)
     {
-        return resolve_reflection_arguments($this->getReflection(), $parameters);
+        return $this->getReflection()->resolveArguments($parameters);
     }
 
     /**
-     * @return \ReflectionFunctionAbstract
+     * @return CallableReflection
      */
     protected function getReflection()
     {

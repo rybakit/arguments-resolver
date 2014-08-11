@@ -2,7 +2,7 @@
 
 namespace CallableArgumentsResolver;
 
-class ReflectionParameterWrapper
+class ParameterReflection
 {
     /**
      * @var \ReflectionParameter

@@ -19,7 +19,7 @@
             "CallableArgumentsResolver\\": "src/"
         },
         "files": [
-            "src/utils.php"
+            "src/functions.php"
         ]
     },
     "extra": {
