@@ -19,7 +19,7 @@ $ composer require rybakit/callable-arguments-resolver:~1.0@dev
 ## Usage example
 
 ```php
-use CallableArgumentsResolver\CallableArgumentsResolver;
+use CallableArgumentsResolver as f;
 
 $informer = function ($username, DateTime $lastLoginDate, $greeting = 'Hello %s!') {
     printf($greeting, $username);
@@ -34,19 +34,38 @@ $parameters = [
     'not an argument',
 ];
 
-$resolver = new CallableArgumentsResolver($informer);
-
-call_user_func_array(
-    $resolver->getCallable(),
-    $resolver->resolveArguments($parameters)
-);
+call_user_func_array($informer, f\resolve_arguments($informer, $parameters));
 ```
 
 The above example will output something similar to:
 
 ```
 Welcome Stranger!
-Your last login was on the 8th of August 2014.
+Your last login was on the 3rd of September 2013.
+```
+
+In a case you need to resolve arguments more than once for the same callable during
+the execution of the script, it's recommended to make use of the `CallableArgumentsResolver` class:
+
+```php
+use CallableArgumentsResolver\CallableArgumentsResolver;
+
+...
+
+$resolver = new CallableArgumentsResolver($informer);
+
+call_user_func_array(
+    $resolver->getCallable(),
+    $resolver->resolveArguments($parameters1)
+);
+
+...
+
+call_user_func_array(
+    $resolver->getCallable(),
+    $resolver->resolveArguments($parameters2)
+);
+
 ```
 
 
