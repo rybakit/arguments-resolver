@@ -156,7 +156,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideCallableTypes
      */
-    public function testRetrievingCallable($callableType)
+    public function testGettingCallable($callableType)
     {
         $callable = create_callable($callableType, 'without_arguments');
         $resolver = new CallableArgumentsResolver($callable);
