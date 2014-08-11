@@ -6,23 +6,14 @@ use CallableArgumentsResolver\CallableReflection;
 
 class CallableReflectionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \ReflectionFunctionAbstract
-     */
-    protected $reflection;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp()
-    {
-        $this->reflection = new \ReflectionFunction(__NAMESPACE__.'\function_with_array');
-    }
+    use TestResolvingTrait;
 
     public function testGettingReflection()
     {
-        $callable = new CallableReflection($this->reflection);
-        $this->assertSame($this->reflection, $callable->getReflection());
+        $reflection = create_reflection('function', 'with_array');
+        $callable = new CallableReflection($reflection);
+
+        $this->assertSame($reflection, $callable->getReflection());
     }
 
     public function testGettingPrettyNameForFunction()
@@ -44,5 +35,13 @@ class CallableReflectionTest extends \PHPUnit_Framework_TestCase
 
         $callable = new CallableReflection($reflection);
         $this->assertEquals($prettyName, $callable->getPrettyName());
+    }
+
+    protected function resolveArguments(array $arguments, $type, $mode)
+    {
+        $reflection = create_reflection($type, $mode);
+        $reflection = new CallableReflection($reflection);
+
+        return $reflection->resolveArguments($arguments);
     }
 }
