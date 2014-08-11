@@ -65,7 +65,6 @@ call_user_func_array(
     $resolver->getCallable(),
     $resolver->resolveArguments($parameters2)
 );
-
 ```
 
 
