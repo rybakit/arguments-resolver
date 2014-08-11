@@ -89,21 +89,19 @@ class ParameterReflection
      */
     public function matchTypehint($value)
     {
-        $class = $this->reflection->getClass();
-
-        if ($class && is_object($value)) {
-            return $class->isInstance($value);
+        if ($class = $this->reflection->getClass()) {
+            return is_object($value) && $class->isInstance($value);
         }
 
-        if ($this->reflection->isArray() && is_array($value)) {
-            return true;
+        if ($this->reflection->isArray()) {
+            return is_array($value);
         }
 
-        if ($this->reflection->isCallable() && is_callable($value)) {
-            return true;
+        if ($this->reflection->isCallable()) {
+            return is_callable($value);
         }
 
-        return false;
+        return true;
     }
 
     /**
