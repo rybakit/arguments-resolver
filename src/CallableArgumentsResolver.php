@@ -38,35 +38,9 @@ class CallableArgumentsResolver
      *
      * @throws \InvalidArgumentException
      */
-    public function resolve(array $parameters)
+    public function resolveArguments(array $parameters)
     {
-        $reflection = $this->getReflection();
-
-        if (count($parameters) < $reflection->getNumberOfRequiredParameters()) {
-            throw new \InvalidArgumentException('Not enough parameters are provided.');
-        }
-
-        $arguments = [];
-        foreach (get_parameters($reflection) as $parameter) {
-            $key = $parameter->findKey($parameters);
-
-            if (null !== $key) {
-                $arguments[$parameter->getPosition()] = $parameters[$key];
-                unset($parameters[$key]);
-                continue;
-            }
-
-            if ($parameter->isDefaultValueAvailable()) {
-                $arguments[$parameter->getPosition()] = $parameter->getDefaultValue();
-                continue;
-            }
-
-            throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s.', $parameter->getPrettyName()));
-        }
-
-        ksort($arguments);
-
-        return $arguments;
+        return resolve_reflection_arguments($this->getReflection(), $parameters);
     }
 
     /**

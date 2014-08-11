@@ -38,7 +38,7 @@ $resolver = new CallableArgumentsResolver($informer);
 
 call_user_func_array(
     $resolver->getCallable(),
-    $resolver->resolve($parameters)
+    $resolver->resolveArguments($parameters)
 );
 ```
 

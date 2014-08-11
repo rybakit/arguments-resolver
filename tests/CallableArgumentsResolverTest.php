@@ -20,7 +20,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
         $parameters = ['foo', new \stdClass(), ['baz'], 'qux'];
 
-        $this->assertSame($parameters, $resolver->resolve($parameters));
+        $this->assertSame($parameters, $resolver->resolveArguments($parameters));
     }
 
     /**
@@ -37,7 +37,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['foo', 'qux', $baz, $bar];
         $arguments = ['foo', $bar, $baz, 'qux'];
 
-        $this->assertSame($arguments, $resolver->resolve($parameters));
+        $this->assertSame($arguments, $resolver->resolveArguments($parameters));
     }
 
     /**
@@ -51,7 +51,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['foo', new \stdClass()];
         $arguments = array_merge($parameters, [[], null]);
 
-        $this->assertSame($arguments, $resolver->resolve($parameters));
+        $this->assertSame($arguments, $resolver->resolveArguments($parameters));
     }
 
     /**
@@ -68,7 +68,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['qux' => 'qux', 'baz' => $baz, 'bar' => $bar, 'foo' => 'foo'];
         $arguments = ['foo', $bar, $baz, 'qux'];
 
-        $this->assertSame($arguments, $resolver->resolve($parameters));
+        $this->assertSame($arguments, $resolver->resolveArguments($parameters));
     }
 
     /**
@@ -85,7 +85,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['bar' => $bar, $foo];
         $arguments = [$foo, $bar, [], null];
 
-        $this->assertSame($arguments, $resolver->resolve($parameters));
+        $this->assertSame($arguments, $resolver->resolveArguments($parameters));
     }
 
     /**
@@ -99,7 +99,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['foo', 'bar'];
         $arguments = array_merge($parameters, [1, 2]);
 
-        $this->assertSame($arguments, $resolver->resolve($parameters));
+        $this->assertSame($arguments, $resolver->resolveArguments($parameters));
     }
 
     /**
@@ -115,7 +115,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $parameters = ['foo', 'baz', $bar];
         $arguments = ['foo', $bar, 'baz'];
 
-        $this->assertSame($arguments, $resolver->resolve($parameters));
+        $this->assertSame($arguments, $resolver->resolveArguments($parameters));
     }
 
     /**
@@ -128,7 +128,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 
         $parameters = ['foo'];
 
-        $this->assertSame([], $resolver->resolve($parameters));
+        $this->assertSame([], $resolver->resolveArguments($parameters));
     }
 
     /**
@@ -139,7 +139,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolvingThrowsExceptionOnInvalidType(callable $callable, $parameters)
     {
         $resolver = new CallableArgumentsResolver($callable);
-        $resolver->resolve($parameters);
+        $resolver->resolveArguments($parameters);
     }
 
     /**
@@ -150,7 +150,7 @@ class CallableArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolvingThrowsExceptionOnEmptyParameters(callable $callable)
     {
         $resolver = new CallableArgumentsResolver($callable);
-        $resolver->resolve([]);
+        $resolver->resolveArguments([]);
     }
 
     /**

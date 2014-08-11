@@ -2,6 +2,45 @@
 
 namespace CallableArgumentsResolver;
 
+function resolve_callable_arguments(callable $callable, array $parameters)
+{
+    $reflection = create_reflection($callable);
+
+    return resolve_reflection_arguments($reflection, $parameters);
+}
+
+function resolve_reflection_arguments(\ReflectionFunctionAbstract $reflection, array $parameters)
+{
+    if (!$num = $reflection->getNumberOfParameters()) {
+        return [];
+    }
+
+    if (count($parameters) < $reflection->getNumberOfRequiredParameters()) {
+        throw new \InvalidArgumentException('Not enough parameters are provided.');
+    }
+
+    $arguments = array_fill(0, $num, null);
+
+    foreach (get_parameters($reflection) as $parameter) {
+        $key = $parameter->findKey($parameters);
+
+        if (null !== $key) {
+            $arguments[$parameter->getPosition()] = $parameters[$key];
+            unset($parameters[$key]);
+            continue;
+        }
+
+        if ($parameter->isDefaultValueAvailable()) {
+            $arguments[$parameter->getPosition()] = $parameter->getDefaultValue();
+            continue;
+        }
+
+        throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s.', $parameter->getPrettyName()));
+    }
+
+    return $arguments;
+}
+
 /**
  * Creates a reflection for the callable.
  *
@@ -32,7 +71,7 @@ function create_reflection(callable $callable)
 function get_parameters(\ReflectionFunctionAbstract $reflection)
 {
     $parameters = $reflection->getParameters();
-    usort($parameters, 'CallableArgumentsResolver\sort_parameters');
+    usort($parameters, __NAMESPACE__.'\sort_parameters');
 
     foreach ($parameters as $parameter) {
         yield new ReflectionParameterWrapper($parameter);
