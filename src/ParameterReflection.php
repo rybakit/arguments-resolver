@@ -91,8 +91,8 @@ class ParameterReflection
     {
         $class = $this->reflection->getClass();
 
-        if ($class && is_object($value) && $class->isInstance($value)) {
-            return true;
+        if ($class && is_object($value)) {
+            return $class->isInstance($value);
         }
 
         if ($this->reflection->isArray() && is_array($value)) {
