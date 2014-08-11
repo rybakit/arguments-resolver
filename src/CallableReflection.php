@@ -9,6 +9,11 @@ class CallableReflection
      */
     private $reflection;
 
+    /**
+     * @var \ReflectionParameter[]
+     */
+    private $parameters;
+
     public function __construct(\ReflectionFunctionAbstract $reflection)
     {
         $this->reflection = $reflection;
@@ -72,10 +77,12 @@ class CallableReflection
      */
     public function getParameters()
     {
-        $parameters = $this->reflection->getParameters();
-        usort($parameters, __NAMESPACE__.'\sort_parameters');
+        if (null === $this->parameters) {
+            $this->parameters = $this->reflection->getParameters();
+            usort($this->parameters, __NAMESPACE__.'\sort_parameters');
+        }
 
-        foreach ($parameters as $parameter) {
+        foreach ($this->parameters as $parameter) {
             yield new ParameterReflection($parameter);
         }
     }
