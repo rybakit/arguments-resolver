@@ -45,7 +45,7 @@ class CallableReflection
         }
 
         if (count($parameters) < $this->reflection->getNumberOfRequiredParameters()) {
-            throw new \InvalidArgumentException(sprintf('Not enough parameters are provided for %s.', $this->getPrettyName()));
+            throw new \InvalidArgumentException(sprintf('Not enough parameters are provided for %s.', $this->getName()));
         }
 
         $arguments = array_fill(0, $num, null);
@@ -64,7 +64,7 @@ class CallableReflection
                 continue;
             }
 
-            throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s.', $parameter->getPrettyName()));
+            throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s of %s.', $parameter->getName(), $this->getName()));
         }
 
         return $arguments;
@@ -87,7 +87,12 @@ class CallableReflection
         }
     }
 
-    public function getPrettyName()
+    /**
+     * Returns the callable name.
+     *
+     * @return string
+     */
+    public function getName()
     {
         if ($this->reflection instanceof \ReflectionFunction) {
             return $this->reflection->name;

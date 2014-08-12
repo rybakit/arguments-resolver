@@ -83,11 +83,11 @@ class ParameterReflection
     }
 
     /**
-     * Returns the parameter's pretty name.
+     * Returns the parameter name.
      *
      * @return string
      */
-    public function getPrettyName()
+    public function getName()
     {
         return sprintf('$%s (#%d)', $this->reflection->name, $this->reflection->getPosition());
     }

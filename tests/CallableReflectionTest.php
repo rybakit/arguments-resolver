@@ -16,25 +16,25 @@ class CallableReflectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($reflection, $callable->getReflection());
     }
 
-    public function testGettingPrettyNameForFunction()
+    public function testGettingNameForFunction()
     {
         $functionName = __NAMESPACE__.'\function_with_array';
         $reflection = new \ReflectionFunction($functionName);
 
         $callable = new CallableReflection($reflection);
-        $this->assertEquals($functionName, $callable->getPrettyName());
+        $this->assertEquals($functionName, $callable->getName());
     }
 
-    public function testGettingPrettyNameForMethod()
+    public function testGettingNameForMethod()
     {
         $className = __NAMESPACE__.'\TestClass';
         $methodName = 'methodWithArray';
 
         $reflection = new \ReflectionMethod($className, $methodName);
-        $prettyName = sprintf('%s::%s', $className, $methodName);
+        $callableName = sprintf('%s::%s', $className, $methodName);
 
         $callable = new CallableReflection($reflection);
-        $this->assertEquals($prettyName, $callable->getPrettyName());
+        $this->assertEquals($callableName, $callable->getName());
     }
 
     protected function resolveArguments(array $arguments, $type, $mode)

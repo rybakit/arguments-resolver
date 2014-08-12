@@ -45,9 +45,9 @@ class ParameterReflectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $parameter->getDefaultValue());
     }
 
-    public function testGettingPrettyName()
+    public function testGettingName()
     {
         $parameter = new ParameterReflection($this->reflection);
-        $this->assertEquals('$array (#1)', $parameter->getPrettyName());
+        $this->assertEquals('$array (#1)', $parameter->getName());
     }
 }
