@@ -93,7 +93,7 @@ class CallableReflection
     {
         if (null === $this->parameters) {
             $this->parameters = $this->reflection->getParameters();
-            uasort($this->parameters, __CLASS__.'::sortParameters');
+            uasort($this->parameters, [__CLASS__, 'sortParameters']);
         }
 
         foreach ($this->parameters as $pos => $parameter) {
