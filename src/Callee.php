@@ -2,7 +2,7 @@
 
 namespace CallableArgumentsResolver;
 
-class CallableReflection
+class Callee
 {
     /**
      * @var \ReflectionFunctionAbstract
@@ -20,7 +20,7 @@ class CallableReflection
     }
 
     /**
-     * Returns the reflection being wrapped.
+     * Returns callable reflection.
      *
      * @return \ReflectionFunctionAbstract
      */
@@ -47,8 +47,8 @@ class CallableReflection
         $arguments = array_fill(0, $number, null);
 
         foreach ($this->getParameters() as $pos => $parameter) {
-            $parameter = new ParameterReflection($parameter);
-            $key = $parameter->findKey($parameters);
+            $argument = new Argument($parameter);
+            $key = $argument->findKey($parameters);
 
             if (null !== $key) {
                 $arguments[$pos] = $parameters[$key];
@@ -56,12 +56,12 @@ class CallableReflection
                 continue;
             }
 
-            if ($parameter->hasDefaultValue()) {
-                $arguments[$pos] = $parameter->getDefaultValue();
+            if ($argument->hasDefaultValue()) {
+                $arguments[$pos] = $argument->getDefaultValue();
                 continue;
             }
 
-            throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s of %s.', $parameter->getName(), $this->getName()));
+            throw new \InvalidArgumentException(sprintf('Unable to resolve argument %s of %s.', $argument->getName(), $this->getName()));
         }
 
         return $arguments;

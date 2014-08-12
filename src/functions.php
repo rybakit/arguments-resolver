@@ -12,17 +12,17 @@ namespace CallableArgumentsResolver;
  */
 function resolve_arguments(callable $callable, array $parameters)
 {
-    return create_reflection($callable)->resolveArguments($parameters);
+    return create_callee($callable)->resolveArguments($parameters);
 }
 
 /**
- * Creates a reflection for the callable.
+ * Creates a callee for the callable.
  *
  * @param callable $callable
  *
- * @return CallableReflection
+ * @return Callee
  */
-function create_reflection(callable $callable)
+function create_callee(callable $callable)
 {
     if (is_array($callable)) {
         $reflection = new \ReflectionMethod($callable[0], $callable[1]);
@@ -32,5 +32,5 @@ function create_reflection(callable $callable)
         $reflection = new \ReflectionFunction($callable);
     }
 
-    return new CallableReflection($reflection);
+    return new Callee($reflection);
 }

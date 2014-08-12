@@ -2,7 +2,7 @@
 
 namespace CallableArgumentsResolver;
 
-class ParameterReflection
+class Argument
 {
     /**
      * @var \ReflectionParameter
@@ -15,7 +15,7 @@ class ParameterReflection
     }
 
     /**
-     * Returns the parameter being wrapped.
+     * Returns argument reflection.
      *
      * @return \ReflectionParameter
      */
@@ -35,7 +35,7 @@ class ParameterReflection
     }
 
     /**
-     * Returns default parameter value.
+     * Returns default argument value.
      *
      * @return mixed
      */

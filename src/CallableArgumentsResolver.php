@@ -10,9 +10,9 @@ class CallableArgumentsResolver
     private $callable;
 
     /**
-     * @var CallableReflection
+     * @var Callee
      */
-    private $reflection;
+    private $callee;
 
     public function __construct(callable $callable)
     {
@@ -38,18 +38,18 @@ class CallableArgumentsResolver
      */
     public function resolveArguments(array $parameters)
     {
-        return $this->getReflection()->resolveArguments($parameters);
+        return $this->getCallee()->resolveArguments($parameters);
     }
 
     /**
-     * @return CallableReflection
+     * @return Callee
      */
-    protected function getReflection()
+    protected function getCallee()
     {
-        if (!$this->reflection) {
-            $this->reflection = create_reflection($this->callable);
+        if (!$this->callee) {
+            $this->callee = create_callee($this->callable);
         }
 
-        return $this->reflection;
+        return $this->callee;
     }
 }

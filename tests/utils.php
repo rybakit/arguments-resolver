@@ -37,12 +37,14 @@ function create_callable($type, $mode)
 /**
  * Creates a reflection object based on the callable type and mode.
  *
- * @param $type
- * @param $mode
+ * @param string $type
+ * @param string $mode
+ *
  * @return \ReflectionFunction|\ReflectionMethod
+ *
  * @throws \InvalidArgumentException
  */
-function create_reflection($type, $mode)
+function create_callable_reflection($type, $mode)
 {
     switch ($type) {
         case 'method':
