@@ -85,7 +85,7 @@ class CallableReflection
     }
 
     /**
-     * Returns a generator of sorted parameters ordered by a typehint and optionality.
+     * Returns a generator of sorted parameters.
      *
      * @return \Generator|ParameterReflection[]
      */
@@ -93,11 +93,40 @@ class CallableReflection
     {
         if (null === $this->parameters) {
             $this->parameters = $this->reflection->getParameters();
-            uasort($this->parameters, __NAMESPACE__.'\sort_parameters');
+            uasort($this->parameters, __CLASS__.'::sortParameters');
         }
 
         foreach ($this->parameters as $pos => $parameter) {
             yield $pos => new ParameterReflection($parameter);
         }
+    }
+
+    /**
+     * Sorts parameters by type and optionality.
+     *
+     * @param \ReflectionParameter $a
+     * @param \ReflectionParameter $b
+     *
+     * @return int
+     */
+    protected static function sortParameters(\ReflectionParameter $a, \ReflectionParameter $b)
+    {
+        if ($a->isOptional() ^ $b->isOptional()) {
+            return (($a->isOptional() > $b->isOptional()) << 1) - 1;
+        }
+        if ($a->getClass() && !$b->getClass()) {
+            return -1;
+        }
+        if (!$a->getClass() && $b->getClass()) {
+            return 1;
+        }
+        if ($a->isArray() ^ $b->isArray()) {
+            return (($a->isArray() < $b->isArray()) << 1) - 1;
+        }
+        if ($a->isCallable() ^ $b->isCallable()) {
+            return (($a->isCallable() < $b->isCallable()) << 1) - 1;
+        }
+
+        return $a->getPosition() - $b->getPosition();
     }
 }
