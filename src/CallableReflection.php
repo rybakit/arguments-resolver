@@ -78,6 +78,7 @@ class CallableReflection
         $arguments = array_fill(0, $numberOfArguments, null);
 
         foreach ($this->getParameters() as $pos => $parameter) {
+            $parameter = new ParameterReflection($parameter);
             $key = $parameter->findKey($parameters);
 
             if (null !== $key) {
@@ -98,9 +99,9 @@ class CallableReflection
     }
 
     /**
-     * Returns a generator of sorted parameters.
+     * Returns an array of sorted parameters.
      *
-     * @return \Generator|ParameterReflection[]
+     * @return \ReflectionParameter[]
      */
     protected function getParameters()
     {
@@ -109,9 +110,7 @@ class CallableReflection
             uasort($this->parameters, [__CLASS__, 'sortParameters']);
         }
 
-        foreach ($this->parameters as $pos => $parameter) {
-            yield $pos => new ParameterReflection($parameter);
-        }
+        return $this->parameters;
     }
 
     /**
