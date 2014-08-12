@@ -71,23 +71,6 @@ class CallableReflection
     }
 
     /**
-     * Returns a generator of sorted parameters ordered by a typehint and optionality.
-     *
-     * @return \Generator
-     */
-    public function getParameters()
-    {
-        if (null === $this->parameters) {
-            $this->parameters = $this->reflection->getParameters();
-            usort($this->parameters, __NAMESPACE__.'\sort_parameters');
-        }
-
-        foreach ($this->parameters as $parameter) {
-            yield new ParameterReflection($parameter);
-        }
-    }
-
-    /**
      * Returns the callable name.
      *
      * @return string
@@ -99,5 +82,22 @@ class CallableReflection
         }
 
         return sprintf('%s::%s', $this->reflection->getDeclaringClass()->name, $this->reflection->name);
+    }
+
+    /**
+     * Returns a generator of sorted parameters ordered by a typehint and optionality.
+     *
+     * @return \Generator
+     */
+    protected function getParameters()
+    {
+        if (null === $this->parameters) {
+            $this->parameters = $this->reflection->getParameters();
+            usort($this->parameters, __NAMESPACE__.'\sort_parameters');
+        }
+
+        foreach ($this->parameters as $parameter) {
+            yield new ParameterReflection($parameter);
+        }
     }
 }
