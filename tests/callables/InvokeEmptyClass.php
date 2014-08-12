@@ -2,7 +2,7 @@
 
 namespace CallableArgumentsResolver\Tests;
 
-class InvokeWithoutArgumentsClass
+class InvokeEmptyClass
 {
     public function __invoke()
     {

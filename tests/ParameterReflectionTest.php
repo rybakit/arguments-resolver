@@ -8,7 +8,7 @@ class ParameterReflectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testGettingReflection()
     {
-        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_with_array', 1);
+        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_array', 1);
         $parameter = new ParameterReflection($reflection);
 
         $this->assertSame($reflection, $parameter->getReflection());
@@ -16,7 +16,7 @@ class ParameterReflectionTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckingDefaultValueAvailability()
     {
-        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_with_optional', 2);
+        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_optional', 2);
         $parameter = new ParameterReflection($reflection);
 
         $this->assertTrue($parameter->hasDefaultValue());
@@ -24,7 +24,7 @@ class ParameterReflectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingDefaultValue()
     {
-        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_with_optional', 2);
+        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_optional', 2);
         $parameter = new ParameterReflection($reflection);
 
         $this->assertEquals(1, $parameter->getDefaultValue());
@@ -32,7 +32,7 @@ class ParameterReflectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingName()
     {
-        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_with_various', 0);
+        $reflection = new \ReflectionParameter(__NAMESPACE__.'\function_various', 0);
         $parameter = new ParameterReflection($reflection);
 
         $this->assertEquals('$foo (#0)', $parameter->getName());

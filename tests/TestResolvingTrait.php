@@ -11,7 +11,7 @@ trait TestResolvingTrait
     {
         $parameters = ['foo', new \stdClass(), ['baz'], 'qux'];
 
-        $this->assertArguments($parameters, $parameters, $callableType, 'with_various');
+        $this->assertArguments($parameters, $parameters, $callableType, 'various');
     }
 
     /**
@@ -25,7 +25,7 @@ trait TestResolvingTrait
         $parameters = ['foo', 'qux', $baz, $bar];
         $arguments = ['foo', $bar, $baz, 'qux'];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'with_various');
+        $this->assertArguments($arguments, $parameters, $callableType, 'various');
     }
 
     /**
@@ -36,7 +36,7 @@ trait TestResolvingTrait
         $parameters = ['foo', new \stdClass()];
         $arguments = array_merge($parameters, [[], null]);
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'with_various');
+        $this->assertArguments($arguments, $parameters, $callableType, 'various');
     }
 
     /**
@@ -50,7 +50,7 @@ trait TestResolvingTrait
         $parameters = ['qux' => 'qux', 'baz' => $baz, 'bar' => $bar, 'foo' => 'foo'];
         $arguments = ['foo', $bar, $baz, 'qux'];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'with_various');
+        $this->assertArguments($arguments, $parameters, $callableType, 'various');
     }
 
     /**
@@ -64,7 +64,7 @@ trait TestResolvingTrait
         $parameters = ['bar' => $bar, $foo];
         $arguments = [$foo, $bar, [], null];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'with_various');
+        $this->assertArguments($arguments, $parameters, $callableType, 'various');
     }
 
     /**
@@ -75,7 +75,7 @@ trait TestResolvingTrait
         $parameters = ['foo', 'bar'];
         $arguments = array_merge($parameters, [1, 2]);
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'with_optional');
+        $this->assertArguments($arguments, $parameters, $callableType, 'optional');
 
     }
 
@@ -89,17 +89,17 @@ trait TestResolvingTrait
         $parameters = [$bar, 'foo', 'baz'];
         $arguments = ['foo', $bar, 'baz'];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'with_callable');
+        $this->assertArguments($arguments, $parameters, $callableType, 'callable');
     }
 
     /**
      * @dataProvider provideCallableTypes
      */
-    public function testResolvingWithoutArguments($callableType)
+    public function testResolvingEmpty($callableType)
     {
         $parameters = ['foo'];
 
-        $this->assertArguments([], $parameters, $callableType, 'without_arguments');
+        $this->assertArguments([], $parameters, $callableType, 'empty');
     }
 
     /**
@@ -127,9 +127,9 @@ trait TestResolvingTrait
         $data = [];
 
         foreach ($this->provideCallableTypes() as $type) {
-            $data[] = [$type[0], 'with_array', [null, null, null]];
-            $data[] = [$type[0], 'with_callable', [null, null, null]];
-            $data[] = [$type[0], 'with_object', [null, null, null]];
+            $data[] = [$type[0], 'array', [null, null, null]];
+            $data[] = [$type[0], 'callable', [null, null, null]];
+            $data[] = [$type[0], 'object', [null, null, null]];
         }
 
         return $data;
@@ -140,7 +140,7 @@ trait TestResolvingTrait
         $data = [];
 
         foreach ($this->provideCallableTypes() as $type) {
-            $data[] = [$type[0], 'with_various'];
+            $data[] = [$type[0], 'various'];
         }
 
         return $data;

@@ -10,7 +10,7 @@ class CallableReflectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingReflection()
     {
-        $reflection = create_reflection('function', 'with_array');
+        $reflection = create_reflection('function', 'array');
         $callable = new CallableReflection($reflection);
 
         $this->assertSame($reflection, $callable->getReflection());
@@ -18,7 +18,7 @@ class CallableReflectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingNameForFunction()
     {
-        $functionName = __NAMESPACE__.'\function_with_array';
+        $functionName = __NAMESPACE__.'\function_array';
         $reflection = new \ReflectionFunction($functionName);
 
         $callable = new CallableReflection($reflection);
@@ -28,7 +28,7 @@ class CallableReflectionTest extends \PHPUnit_Framework_TestCase
     public function testGettingNameForMethod()
     {
         $className = __NAMESPACE__.'\TestClass';
-        $methodName = 'methodWithArray';
+        $methodName = 'methodArray';
 
         $reflection = new \ReflectionMethod($className, $methodName);
         $callableName = sprintf('%s::%s', $className, $methodName);

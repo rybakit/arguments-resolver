@@ -2,7 +2,7 @@
 
 namespace CallableArgumentsResolver\Tests;
 
-class InvokeWithVariousClass
+class InvokeVariousClass
 {
     public function __invoke($foo, \stdClass $bar, array $baz = [], $qux = null)
     {
