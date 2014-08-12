@@ -50,17 +50,17 @@ class CallableReflection
 
         $arguments = array_fill(0, $num, null);
 
-        foreach ($this->getParameters() as $parameter) {
+        foreach ($this->getParameters() as $pos => $parameter) {
             $key = $parameter->findKey($parameters);
 
             if (null !== $key) {
-                $arguments[$parameter->getPosition()] = $parameters[$key];
+                $arguments[$pos] = $parameters[$key];
                 unset($parameters[$key]);
                 continue;
             }
 
-            if ($parameter->isDefaultValueAvailable()) {
-                $arguments[$parameter->getPosition()] = $parameter->getDefaultValue();
+            if ($parameter->hasDefaultValue()) {
+                $arguments[$pos] = $parameter->getDefaultValue();
                 continue;
             }
 
@@ -87,17 +87,17 @@ class CallableReflection
     /**
      * Returns a generator of sorted parameters ordered by a typehint and optionality.
      *
-     * @return \Generator
+     * @return \Generator|ParameterReflection[]
      */
     protected function getParameters()
     {
         if (null === $this->parameters) {
             $this->parameters = $this->reflection->getParameters();
-            usort($this->parameters, __NAMESPACE__.'\sort_parameters');
+            uasort($this->parameters, __NAMESPACE__.'\sort_parameters');
         }
 
-        foreach ($this->parameters as $parameter) {
-            yield new ParameterReflection($parameter);
+        foreach ($this->parameters as $pos => $parameter) {
+            yield $pos => new ParameterReflection($parameter);
         }
     }
 }

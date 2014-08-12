@@ -25,21 +25,11 @@ class ParameterReflection
     }
 
     /**
-     * Returns the parameter position.
-     *
-     * @return int
-     */
-    public function getPosition()
-    {
-        return $this->reflection->getPosition();
-    }
-
-    /**
      * Checks if a default value is available.
      *
      * @return bool
      */
-    public function isDefaultValueAvailable()
+    public function hasDefaultValue()
     {
         return $this->reflection->isDefaultValueAvailable();
     }
