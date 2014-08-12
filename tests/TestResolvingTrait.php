@@ -115,7 +115,7 @@ trait TestResolvingTrait
     /**
      * @dataProvider provideCallableDataWithRequiredArguments
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Not enough parameters are provided
+     * @expectedExceptionMessage Unable to resolve argument
      */
     public function testResolvingThrowsExceptionOnEmptyParameters($callableType, $mode)
     {

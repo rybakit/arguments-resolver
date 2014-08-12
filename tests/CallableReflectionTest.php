@@ -31,7 +31,7 @@ class CallableReflectionTest extends \PHPUnit_Framework_TestCase
         $methodName = 'methodArray';
 
         $reflection = new \ReflectionMethod($className, $methodName);
-        $callableName = sprintf('%s::%s', $className, $methodName);
+        $callableName = sprintf('%s::%s()', $className, $methodName);
 
         $callable = new CallableReflection($reflection);
         $this->assertEquals($callableName, $callable->getName());

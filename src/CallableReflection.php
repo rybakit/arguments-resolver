@@ -44,38 +44,7 @@ class CallableReflection
             return [];
         }
 
-        if (count($parameters) < $this->reflection->getNumberOfRequiredParameters()) {
-            throw new \InvalidArgumentException(sprintf('Not enough parameters are provided for %s.', $this->getName()));
-        }
-
-        return $this->doResolveArguments($parameters, $number);
-    }
-
-    /**
-     * Returns the callable name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        if ($this->reflection instanceof \ReflectionFunction) {
-            return $this->reflection->name;
-        }
-
-        return sprintf('%s::%s', $this->reflection->getDeclaringClass()->name, $this->reflection->name);
-    }
-
-    /**
-     * @param array $parameters
-     * @param int   $numberOfArguments
-     *
-     * @return array
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function doResolveArguments(array $parameters, $numberOfArguments)
-    {
-        $arguments = array_fill(0, $numberOfArguments, null);
+        $arguments = array_fill(0, $number, null);
 
         foreach ($this->getParameters() as $pos => $parameter) {
             $parameter = new ParameterReflection($parameter);
@@ -96,6 +65,20 @@ class CallableReflection
         }
 
         return $arguments;
+    }
+
+    /**
+     * Returns the callable name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        if ($this->reflection instanceof \ReflectionFunction) {
+            return $this->reflection->name;
+        }
+
+        return sprintf('%s::%s()', $this->reflection->getDeclaringClass()->name, $this->reflection->name);
     }
 
     /**
