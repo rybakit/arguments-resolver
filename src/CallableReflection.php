@@ -114,12 +114,15 @@ class CallableReflection
         if ($a->isOptional() ^ $b->isOptional()) {
             return $a->isOptional() << 1 - 1;
         }
+
         if (null !== $a->getClass() ^ null !== $b->getClass()) {
             return $a->getClass() ? -1 : 1;
         }
+
         if ($a->isArray() ^ $b->isArray()) {
             return $b->isArray() << 1 - 1;
         }
+
         if ($a->isCallable() ^ $b->isCallable()) {
             return $b->isCallable() << 1 - 1;
         }
