@@ -63,31 +63,43 @@ class ParameterReflection
      */
     public function findKey(array $parameters)
     {
-        return $this->hasTypehint()
-            ? $this->doFindKeyByTypehint($parameters)
-            : $this->doFindKey($parameters);
+        $found = null;
+
+        foreach ($parameters as $key => $value) {
+            if (!$this->matchType($value)) {
+                continue;
+            }
+
+            if ($key === $this->reflection->name) {
+                return $key;
+            }
+
+            if (null === $found) {
+                $found = $key;
+            }
+        }
+
+        return $found;
     }
 
     /**
-     * Checks if the parameter has a typehint.
+     * Returns the parameter's pretty name.
      *
-     * @return bool
+     * @return string
      */
-    public function hasTypehint()
+    public function getPrettyName()
     {
-        return $this->reflection->getClass()
-            || $this->reflection->isArray()
-            || $this->reflection->isCallable();
+        return sprintf('$%s (#%d)', $this->reflection->name, $this->reflection->getPosition());
     }
 
     /**
-     * Checks if the value match the parameter typehint.
+     * Checks if the value match the parameter type.
      *
      * @param mixed $value
      *
      * @return bool
      */
-    public function matchTypehint($value)
+    protected function matchType($value)
     {
         if ($class = $this->reflection->getClass()) {
             return is_object($value) && $class->isInstance($value);
@@ -102,61 +114,5 @@ class ParameterReflection
         }
 
         return true;
-    }
-
-    /**
-     * Returns the parameter's pretty name.
-     *
-     * @return string
-     */
-    public function getPrettyName()
-    {
-        return sprintf('$%s (#%d)', $this->reflection->name, $this->reflection->getPosition());
-    }
-
-    /**
-     * @param array $parameters
-     *
-     * @return mixed
-     */
-    protected function doFindKey(array $parameters)
-    {
-        if (!$parameters) {
-            return;
-        }
-
-        if (array_key_exists($this->reflection->name, $parameters)) {
-            return $this->reflection->name;
-        }
-
-        reset($parameters);
-
-        return key($parameters);
-    }
-
-    /**
-     * @param array $parameters
-     *
-     * @return mixed
-     */
-    protected function doFindKeyByTypehint(array $parameters)
-    {
-        $found = null;
-
-        foreach ($parameters as $key => $value) {
-            if (!$this->matchTypehint($value)) {
-                continue;
-            }
-
-            if ($key === $this->reflection->name) {
-                return $key;
-            }
-
-            if (!$found) {
-                $found = $key;
-            }
-        }
-
-        return $found;
     }
 }
