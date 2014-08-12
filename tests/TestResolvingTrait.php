@@ -86,7 +86,7 @@ trait TestResolvingTrait
     {
         $bar = function () {};
 
-        $parameters = ['foo', 'baz', $bar];
+        $parameters = [$bar, 'foo', 'baz'];
         $arguments = ['foo', $bar, 'baz'];
 
         $this->assertArguments($arguments, $parameters, $callableType, 'with_callable');
