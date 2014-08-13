@@ -22,6 +22,6 @@ function function_object($mixed1, \stdClass $object, $mixed2)
 {
 }
 
-function function_optional($mixed1, $mixed2, $optional1 = 1, $optional1 = 2)
+function function_optional($mixed1, $mixed2, $optional1 = 1, $optional2 = 2)
 {
 }

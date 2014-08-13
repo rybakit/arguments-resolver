@@ -24,7 +24,7 @@ class TestClass
     {
     }
 
-    public function methodOptional($mixed1, $mixed2, $optional1 = 1, $optional1 = 2)
+    public function methodOptional($mixed1, $mixed2, $optional1 = 1, $optional2 = 2)
     {
     }
 
@@ -48,7 +48,7 @@ class TestClass
     {
     }
 
-    public static function staticMethodOptional($mixed1, $mixed2, $optional1 = 1, $optional1 = 2)
+    public static function staticMethodOptional($mixed1, $mixed2, $optional1 = 1, $optional2 = 2)
     {
     }
 }
