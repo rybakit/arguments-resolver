@@ -162,7 +162,10 @@ trait TestResolvingTrait
         $this->assertSame($expected, $this->resolveArguments($actual, $type, $mode));
     }
 
-    abstract public function assertSame($expected, $actual, $message = null);
-
     abstract protected function resolveArguments(array $arguments, $type, $mode);
+
+    /**
+     * @see PHPUnit_Framework_Assert::assertSame()
+     */
+    abstract public static function assertSame($expected, $actual, $message = '');
 }
