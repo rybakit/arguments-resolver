@@ -22,6 +22,15 @@
             "src/functions.php"
         ]
     },
+    "autoload-dev" : {
+        "psr-4": {
+            "CallableArgumentsResolver\\Tests\\": ["tests/", "tests/callables/"]
+        },
+        "files": [
+            "tests/callables/functions.php",
+            "tests/utils.php"
+        ]
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
