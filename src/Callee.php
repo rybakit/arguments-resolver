@@ -74,11 +74,13 @@ class Callee
      */
     public function getName()
     {
-        if ($this->reflection instanceof \ReflectionFunction) {
-            return $this->reflection->name;
+        $name = $this->reflection->name.'()';
+
+        if ($this->reflection instanceof \ReflectionMethod) {
+            $name = $this->reflection->getDeclaringClass()->name.'::'.$name;
         }
 
-        return sprintf('%s::%s()', $this->reflection->getDeclaringClass()->name, $this->reflection->name);
+        return $name;
     }
 
     /**

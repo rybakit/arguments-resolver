@@ -19,23 +19,24 @@ class CalleeTest extends \PHPUnit_Framework_TestCase
     public function testGettingNameForFunction()
     {
         $functionName = __NAMESPACE__.'\function_array';
-        $reflection = new \ReflectionFunction($functionName);
+        $calleeName = $functionName.'()';
 
+        $reflection = new \ReflectionFunction($functionName);
         $callee = new Callee($reflection);
 
-        $this->assertEquals($functionName, $callee->getName());
+        $this->assertEquals($calleeName, $callee->getName());
     }
 
     public function testGettingNameForMethod()
     {
         $className = __NAMESPACE__.'\TestClass';
         $methodName = 'methodArray';
+        $calleeName = sprintf('%s::%s()', $className, $methodName);
 
         $reflection = new \ReflectionMethod($className, $methodName);
-        $callableName = sprintf('%s::%s()', $className, $methodName);
-
         $callee = new Callee($reflection);
-        $this->assertEquals($callableName, $callee->getName());
+
+        $this->assertEquals($calleeName, $callee->getName());
     }
 
     protected function resolveArguments(array $arguments, $type, $mode)
