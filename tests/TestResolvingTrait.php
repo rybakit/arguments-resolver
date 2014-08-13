@@ -157,10 +157,12 @@ trait TestResolvingTrait
         ];
     }
 
-    protected function assertArguments(array $expected, array $actual, $type, $mode)
+    public function assertArguments(array $expected, array $actual, $type, $mode)
     {
         $this->assertSame($expected, $this->resolveArguments($actual, $type, $mode));
     }
+
+    abstract public function assertSame($expected, $actual, $message = null);
 
     abstract protected function resolveArguments(array $arguments, $type, $mode);
 }
