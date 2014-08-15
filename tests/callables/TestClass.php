@@ -28,6 +28,10 @@ class TestClass
     {
     }
 
+    public function methodObjectHierarchyReverse($mixed1, \RuntimeException $object1, $mixed2, \Exception $object2)
+    {
+    }
+
     public function methodOptional($mixed1, $mixed2, $optional1 = 1, $optional2 = 2)
     {
     }
@@ -53,6 +57,10 @@ class TestClass
     }
 
     public static function staticMethodObjectHierarchy($mixed1, \Exception $object1, $mixed2, \RuntimeException $object2)
+    {
+    }
+
+    public static function staticMethodObjectHierarchyReverse($mixed1, \RuntimeException $object1, $mixed2, \Exception $object2)
     {
     }
 

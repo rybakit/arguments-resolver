@@ -110,6 +110,20 @@ trait TestResolvingTrait
     /**
      * @dataProvider provideCallableTypes
      */
+    public function testResolvingObjectHierarchyTypeReverse($callableType)
+    {
+        $bar = new \RuntimeException();
+        $qux = new \Exception();
+
+        $parameters = [$qux, 'foo', $bar, 'baz'];
+        $arguments = ['foo', $bar, 'baz', $qux];
+
+        $this->assertArguments($arguments, $parameters, $callableType, 'object_hierarchy_reverse');
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
     public function testResolvingCallable($callableType)
     {
         $bar = function () {};

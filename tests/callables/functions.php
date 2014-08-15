@@ -26,6 +26,10 @@ function function_object_hierarchy($mixed1, \Exception $object1, $mixed2, \Runti
 {
 }
 
+function function_object_hierarchy_reverse($mixed1, \RuntimeException $object1, $mixed2, \Exception $object2)
+{
+}
+
 function function_optional($mixed1, $mixed2, $optional1 = 1, $optional2 = 2)
 {
 }
