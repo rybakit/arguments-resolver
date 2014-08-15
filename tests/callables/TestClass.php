@@ -20,7 +20,11 @@ class TestClass
     {
     }
 
-    public function methodObject($mixed1, \stdClass $object, $mixed2)
+    public function methodObjectSame($mixed1, \stdClass $object1, $mixed2, \stdClass $object2)
+    {
+    }
+
+    public function methodObjectHierarchy($mixed1, \Exception $object1, $mixed2, \RuntimeException $object2)
     {
     }
 
@@ -44,7 +48,11 @@ class TestClass
     {
     }
 
-    public static function staticMethodObject($mixed1, \stdClass $object, $mixed2)
+    public static function staticMethodObjectSame($mixed1, \stdClass $object1, $mixed2, \stdClass $object2)
+    {
+    }
+
+    public static function staticMethodObjectHierarchy($mixed1, \Exception $object1, $mixed2, \RuntimeException $object2)
     {
     }
 

@@ -92,28 +92,28 @@ class Callee
     {
         if (null === $this->parameters) {
             $this->parameters = $this->reflection->getParameters();
-            uasort($this->parameters, [__CLASS__, 'sortParameters']);
+            uasort($this->parameters, [__CLASS__, 'compareParameters']);
         }
 
         return $this->parameters;
     }
 
     /**
-     * Sorts parameters by type and optionality.
+     * Compares parameters by type and optionality.
      *
      * @param \ReflectionParameter $a
      * @param \ReflectionParameter $b
      *
      * @return int
      */
-    protected static function sortParameters(\ReflectionParameter $a, \ReflectionParameter $b)
+    protected static function compareParameters(\ReflectionParameter $a, \ReflectionParameter $b)
     {
         if ($a->isOptional() ^ $b->isOptional()) {
             return $a->isOptional() << 1 - 1;
         }
 
-        if (null !== $a->getClass() ^ null !== $b->getClass()) {
-            return $a->getClass() ? -1 : 1;
+        if (0 !== $result = self::compareParameterClasses($a, $b)) {
+            return $result;
         }
 
         if ($a->isArray() ^ $b->isArray()) {
@@ -125,5 +125,37 @@ class Callee
         }
 
         return $a->getPosition() - $b->getPosition();
+    }
+
+    /**
+     * Compares parameters by class.
+     *
+     * @param \ReflectionParameter $a
+     * @param \ReflectionParameter $b
+     *
+     * @return int
+     */
+    protected static function compareParameterClasses(\ReflectionParameter $a, \ReflectionParameter $b)
+    {
+        $aClass = $a->getClass();
+        $bClass = $b->getClass();
+
+        if (!$aClass && !$bClass) {
+            return 0;
+        }
+
+        if (!$aClass || !$bClass) {
+            return $aClass ? -1 : 1;
+        }
+
+        if ($aClass->isSubclassOf($bClass->name)) {
+            return -1;
+        }
+
+        if ($bClass->isSubclassOf($aClass->name)) {
+            return 1;
+        }
+
+        return 0;
     }
 }

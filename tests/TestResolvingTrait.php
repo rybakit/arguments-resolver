@@ -82,6 +82,34 @@ trait TestResolvingTrait
     /**
      * @dataProvider provideCallableTypes
      */
+    public function testResolvingObjectSameType($callableType)
+    {
+        $bar = (object) ['name' => 'bar'];
+        $qux = (object) ['name' => 'qux'];
+
+        $parameters = [$bar, 'foo', $qux, 'baz'];
+        $arguments = ['foo', $bar, 'baz', $qux];
+
+        $this->assertArguments($arguments, $parameters, $callableType, 'object_same');
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
+    public function testResolvingObjectHierarchyType($callableType)
+    {
+        $bar = new \Exception();
+        $qux = new \RuntimeException();
+
+        $parameters = [$qux, 'foo', $bar, 'baz'];
+        $arguments = ['foo', $bar, 'baz', $qux];
+
+        $this->assertArguments($arguments, $parameters, $callableType, 'object_hierarchy');
+    }
+
+    /**
+     * @dataProvider provideCallableTypes
+     */
     public function testResolvingCallable($callableType)
     {
         $bar = function () {};
@@ -129,7 +157,7 @@ trait TestResolvingTrait
         foreach ($this->provideCallableTypes() as $type) {
             $data[] = [$type[0], 'array', [null, null, null]];
             $data[] = [$type[0], 'callable', [null, null, null]];
-            $data[] = [$type[0], 'object', [null, null, null]];
+            $data[] = [$type[0], 'object_same', [null, null, null, null]];
         }
 
         return $data;

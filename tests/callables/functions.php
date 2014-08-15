@@ -18,7 +18,11 @@ function function_callable($mixed1, callable $callable, $mixed2)
 {
 }
 
-function function_object($mixed1, \stdClass $object, $mixed2)
+function function_object_same($mixed1, \stdClass $object1, $mixed2, \stdClass $object2)
+{
+}
+
+function function_object_hierarchy($mixed1, \Exception $object1, $mixed2, \RuntimeException $object2)
 {
 }
 
