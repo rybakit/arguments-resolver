@@ -148,14 +148,6 @@ class Callee
             return $aClass ? -1 : 1;
         }
 
-        if ($aClass->isSubclassOf($bClass->name)) {
-            return -1;
-        }
-
-        if ($bClass->isSubclassOf($aClass->name)) {
-            return 1;
-        }
-
-        return 0;
+        return $aClass->isSubclassOf($bClass->name) ? -1 : (int) $bClass->isSubclassOf($aClass->name);
     }
 }
