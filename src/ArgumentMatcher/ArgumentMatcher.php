@@ -5,6 +5,8 @@ namespace CallableArgumentsResolver\ArgumentMatcher;
 interface ArgumentMatcher
 {
     /**
+     * Filters parameters.
+     *
      * @param \ReflectionParameter[] $parameters
      *
      * @return \ReflectionParameter[]
@@ -12,6 +14,8 @@ interface ArgumentMatcher
     public function filter(array $parameters);
 
     /**
+     * Returns a position of the first matched value or null otherwise.
+     *
      * @param \ReflectionParameter $parameter
      * @param array                $parameters
      *
