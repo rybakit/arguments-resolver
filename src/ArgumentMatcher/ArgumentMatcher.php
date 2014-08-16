@@ -14,7 +14,8 @@ interface ArgumentMatcher
     public function filter(array $parameters);
 
     /**
-     * Returns a position of the first matched value or null otherwise.
+     * Returns the position of the first matched value in the parameters array
+     * or null otherwise.
      *
      * @param \ReflectionParameter $parameter
      * @param array                $parameters
