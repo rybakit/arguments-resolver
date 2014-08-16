@@ -5,7 +5,7 @@ namespace CallableArgumentsResolver\Tests;
 use CallableArgumentsResolver\ArgumentMatcher\InDepthArgumentMatcher;
 use CallableArgumentsResolver\ArgumentsResolver;
 
-class CalleeTest extends \PHPUnit_Framework_TestCase
+class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 {
     use TestResolvingTrait;
 
