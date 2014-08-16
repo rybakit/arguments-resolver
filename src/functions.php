@@ -2,35 +2,54 @@
 
 namespace CallableArgumentsResolver;
 
+use CallableArgumentsResolver\ArgumentMatcher\ArgumentMatcher;
+use CallableArgumentsResolver\ArgumentMatcher\InDepthArgumentMatcher;
+
 /**
  * Resolves callable arguments.
  *
- * @param callable $callable
- * @param array    $parameters
+ * @param callable             $callable
+ * @param array                $parameters
+ * @param ArgumentMatcher|null $matcher
  *
  * @return array
  */
-function resolve_arguments(callable $callable, array $parameters)
+function resolve_arguments(callable $callable, array $parameters, ArgumentMatcher $matcher = null)
 {
-    return create_callee($callable)->resolveArguments($parameters);
+    return create_resolver($callable, $matcher)->resolveArguments($parameters);
 }
 
 /**
- * Creates a callee for the callable.
+ * Creates an arguments resolver.
+ *
+ * @param callable             $callable
+ * @param ArgumentMatcher|null $matcher
+ *
+ * @return ArgumentsResolver
+ */
+function create_resolver(callable $callable, ArgumentMatcher $matcher = null)
+{
+    $reflection = create_callable_reflection($callable);
+
+    return new ArgumentsResolver($reflection, $matcher ?: new InDepthArgumentMatcher());
+}
+
+/**
+ * Creates callable reflection.
  *
  * @param callable $callable
  *
- * @return Callee
+ * @return \ReflectionFunction|\ReflectionMethod
  */
-function create_callee(callable $callable)
+function create_callable_reflection(callable $callable)
 {
     if (is_array($callable)) {
-        $reflection = new \ReflectionMethod($callable[0], $callable[1]);
-    } else if (is_object($callable) && !$callable instanceof \Closure) {
-        $reflection = (new \ReflectionObject($callable))->getMethod('__invoke');
-    } else {
-        $reflection = new \ReflectionFunction($callable);
+        return new \ReflectionMethod($callable[0], $callable[1]);
     }
 
-    return new Callee($reflection);
+    if (is_object($callable) && !$callable instanceof \Closure) {
+        return (new \ReflectionObject($callable))->getMethod('__invoke');
+    }
+
+    return new \ReflectionFunction($callable);
 }

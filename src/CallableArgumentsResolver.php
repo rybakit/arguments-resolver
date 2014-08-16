@@ -2,6 +2,8 @@
 
 namespace CallableArgumentsResolver;
 
+use CallableArgumentsResolver\ArgumentMatcher\ArgumentMatcher;
+
 class CallableArgumentsResolver
 {
     /**
@@ -10,13 +12,19 @@ class CallableArgumentsResolver
     private $callable;
 
     /**
-     * @var Callee
+     * @var ArgumentMatcher
      */
-    private $callee;
+    private $matcher;
 
-    public function __construct(callable $callable)
+    /**
+     * @var ArgumentsResolver
+     */
+    private $resolver;
+
+    public function __construct(callable $callable, ArgumentMatcher $matcher = null)
     {
         $this->callable = $callable;
+        $this->matcher = $matcher;
     }
 
     /**
@@ -38,18 +46,18 @@ class CallableArgumentsResolver
      */
     public function resolveArguments(array $parameters)
     {
-        return $this->getCallee()->resolveArguments($parameters);
+        return $this->getResolver()->resolveArguments($parameters);
     }
 
     /**
-     * @return Callee
+     * @return ArgumentsResolver
      */
-    protected function getCallee()
+    protected function getResolver()
     {
-        if (!$this->callee) {
-            $this->callee = create_callee($this->callable);
+        if (!$this->resolver) {
+            $this->resolver = create_resolver($this->callable, $this->matcher);
         }
 
-        return $this->callee;
+        return $this->resolver;
     }
 }
