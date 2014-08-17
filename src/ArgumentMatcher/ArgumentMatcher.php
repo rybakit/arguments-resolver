@@ -5,7 +5,7 @@ namespace CallableArgumentsResolver\ArgumentMatcher;
 interface ArgumentMatcher
 {
     /**
-     * Filters parameters.
+     * Returns a filtered array of the reflection parameters.
      *
      * @param \ReflectionParameter[] $parameters
      *
