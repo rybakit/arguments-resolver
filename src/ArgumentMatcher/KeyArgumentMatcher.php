@@ -17,6 +17,8 @@ class KeyArgumentMatcher implements ArgumentMatcher
      */
     public function match(\ReflectionParameter $parameter, array $parameters)
     {
-        return array_key_exists($parameter->name, $parameters);
+        return array_key_exists($parameter->name, $parameters)
+            ? $parameter->name
+            : null;
     }
 }
