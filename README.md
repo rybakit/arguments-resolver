@@ -131,7 +131,7 @@ $resolver->resolveArguments('foo', [
     ...
     'c',
     'a' => 'a',
-    'b' => 'a',
+    'b' => 'b',
     ...
 ]);
 ```
