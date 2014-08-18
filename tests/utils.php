@@ -15,19 +15,19 @@ namespace CallableArgumentsResolver\Tests;
 function create_callable($type, $mode)
 {
     switch ($type) {
-        case 'method':
+        case CallableTypes::METHOD:
             return [new TestClass(), 'method'.camelize($mode)];
 
-        case 'static_method':
+        case CallableTypes::STATIC_METHOD:
             return [__NAMESPACE__.'\TestClass', 'staticMethod'.camelize($mode)];
 
-        case 'invoked_method':
+        case CallableTypes::INVOKED_METHOD:
             return (new \ReflectionClass(__NAMESPACE__.'\Invoke'.camelize($mode).'Class'))->newInstance();
 
-        case 'closure':
+        case CallableTypes::CLOSURE:
             return (new \ReflectionFunction(__NAMESPACE__.'\function_'.$mode))->getClosure();
 
-        case 'function':
+        case CallableTypes::FUNC:
             return __NAMESPACE__.'\function_'.$mode;
     }
 
@@ -47,15 +47,15 @@ function create_callable($type, $mode)
 function create_callable_reflection($type, $mode)
 {
     switch ($type) {
-        case 'method':
-        case 'static_method':
+        case CallableTypes::METHOD:
+        case CallableTypes::STATIC_METHOD:
             return new \ReflectionMethod(__NAMESPACE__.'\TestClass', 'staticMethod'.camelize($mode));
 
-        case 'invoked_method':
+        case CallableTypes::INVOKED_METHOD:
             return new \ReflectionMethod(__NAMESPACE__.'\Invoke'.camelize($mode).'Class', '__invoke');
 
-        case 'closure':
-        case 'function':
+        case CallableTypes::CLOSURE:
+        case CallableTypes::FUNC:
             return new \ReflectionFunction(__NAMESPACE__.'\function_'.$mode);
     }
 
