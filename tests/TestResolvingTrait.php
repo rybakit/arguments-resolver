@@ -145,6 +145,16 @@ trait TestResolvingTrait
     }
 
     /**
+     * @dataProvider provideCallableTypes
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unable to resolve argument
+     */
+    public function testResolvingThrowsExceptionOnEmptyParameters($callableType)
+    {
+        $this->resolveArguments([], $callableType, 'various');
+    }
+
+    /**
      * @dataProvider provideCallableDataWithInvalidTypes
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unable to resolve argument
@@ -152,16 +162,6 @@ trait TestResolvingTrait
     public function testResolvingThrowsExceptionOnInvalidType($callableType, $functionName, $parameters)
     {
         $this->resolveArguments($parameters, $callableType, $functionName);
-    }
-
-    /**
-     * @dataProvider provideCallableDataWithRequiredArguments
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to resolve argument
-     */
-    public function testResolvingThrowsExceptionOnEmptyParameters($callableType, $mode)
-    {
-        $this->resolveArguments([], $callableType, $mode);
     }
 
     public function provideCallableDataWithInvalidTypes()
@@ -172,17 +172,6 @@ trait TestResolvingTrait
             $data[] = [$type[0], 'array', [null, null, null]];
             $data[] = [$type[0], 'callable', [null, null, null]];
             $data[] = [$type[0], 'object_same', [null, null, null, null]];
-        }
-
-        return $data;
-    }
-
-    public function provideCallableDataWithRequiredArguments()
-    {
-        $data = [];
-
-        foreach ($this->provideCallableTypes() as $type) {
-            $data[] = [$type[0], 'various'];
         }
 
         return $data;
@@ -209,5 +198,5 @@ trait TestResolvingTrait
     /**
      * @see PHPUnit_Framework_Assert::assertSame()
      */
-    abstract public static function assertSame($expected, $actual, $message = '');
+    abstract public function assertSame($expected, $actual, $message = '');
 }
