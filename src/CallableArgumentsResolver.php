@@ -52,7 +52,7 @@ class CallableArgumentsResolver
     /**
      * @return ArgumentsResolver
      */
-    protected function getResolver()
+    private function getResolver()
     {
         if (!$this->resolver) {
             $this->resolver = create_resolver($this->callable, $this->matcher);

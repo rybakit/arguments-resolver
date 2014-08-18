@@ -28,16 +28,6 @@ class ArgumentsResolver
     }
 
     /**
-     * Returns callable reflection.
-     *
-     * @return \ReflectionFunctionAbstract
-     */
-    public function getReflection()
-    {
-        return $this->reflection;
-    }
-
-    /**
      * Resolves callable arguments.
      *
      * @param array $parameters
@@ -80,11 +70,25 @@ class ArgumentsResolver
     }
 
     /**
+     * Returns an array of reflection parameters.
+     *
+     * @return \ReflectionParameter[]
+     */
+    private function getParameters()
+    {
+        if (null === $this->parameters) {
+            $this->parameters = $this->matcher->filter($this->reflection->getParameters());
+        }
+
+        return $this->parameters;
+    }
+
+    /**
      * Returns the callable name.
      *
      * @return string
      */
-    public function getCallableName()
+    private function getCallableName()
     {
         $name = $this->reflection->name.'()';
 
@@ -93,19 +97,5 @@ class ArgumentsResolver
         }
 
         return $name;
-    }
-
-    /**
-     * Returns an array of reflection parameters.
-     *
-     * @return \ReflectionParameter[]
-     */
-    protected function getParameters()
-    {
-        if (null === $this->parameters) {
-            $this->parameters = $this->matcher->filter($this->reflection->getParameters());
-        }
-
-        return $this->parameters;
     }
 }
