@@ -19,6 +19,6 @@ class KeyArgumentMatcher implements ArgumentMatcher
     {
         return array_key_exists($parameter->name, $parameters)
             ? $parameter->name
-            : null;
+            : false;
     }
 }

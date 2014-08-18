@@ -47,7 +47,7 @@ class ArgumentsResolver
         foreach ($this->getParameters() as $pos => $parameter) {
             $key = $this->matcher->match($parameter, $parameters);
 
-            if (null !== $key) {
+            if (false !== $key) {
                 $arguments[$pos] = $parameters[$key];
                 unset($parameters[$key]);
                 continue;

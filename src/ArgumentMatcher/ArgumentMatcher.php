@@ -15,7 +15,7 @@ interface ArgumentMatcher
 
     /**
      * Returns the position of the first matched value in the parameters array
-     * or null otherwise.
+     * or false otherwise.
      *
      * @param \ReflectionParameter $parameter
      * @param array                $parameters

@@ -19,7 +19,7 @@ class InDepthArgumentMatcher implements ArgumentMatcher
      */
     public function match(\ReflectionParameter $parameter, array $parameters)
     {
-        $found = null;
+        $found = false;
 
         foreach ($parameters as $key => $value) {
             if (!$this->matchType($parameter, $value)) {
@@ -30,7 +30,7 @@ class InDepthArgumentMatcher implements ArgumentMatcher
                 return $key;
             }
 
-            if (null === $found) {
+            if (false === $found) {
                 $found = $key;
             }
         }
