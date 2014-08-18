@@ -68,6 +68,83 @@ call_user_func_array(
 ```
 
 
+## Argument matchers
+
+#### InDepthArgumentMatcher
+
+By default, arguments are resolved based on "in-depth" matching strategy.
+It means that a decision about whether an argument matched the parameter value or not is influenced
+by multiple factors, namely the argument's type, the class hierarchy (if it's an object),
+the argument position and its name.
+
+Here are some examples:
+
+*Argument type*
+
+```php
+function foo(array $array, stdClass $obj, callable $callable) {}
+
+$resolver->resolveArguments('foo', [
+    ...
+    function () {},
+    ...
+    new stdClass(),
+    ...
+    [42],
+    ...
+]);
+```
+
+
+*Class hierarchy*
+
+```php
+function foo(Exception $e, RuntimeException $re) {}
+
+$resolver->resolveArguments('foo', [
+    ...
+    new RuntimeException(),
+    ...
+    new Exception(),
+    ...
+]);
+```
+
+*Argument position*
+
+```php
+function foo($a, $b) {}
+
+$resolver->resolveArguments('foo', [
+    'a',
+    'b',
+    ...
+]);
+```
+
+*Argument name*
+
+```php
+function foo($a, $b) {}
+
+$resolver->resolveArguments('foo', [
+    ...
+    'c',
+    'a' => 'a',
+    'b' => 'a',
+    ...
+]);
+```
+
+
+#### KeyArgumentMatcher
+
+
+
+#### Custom argument matcher
+
+
+
 ## Tests
 
 CallableArgumentsResolver uses [PHPUnit](http://phpunit.de) for unit testing.
