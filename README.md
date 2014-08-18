@@ -21,9 +21,9 @@ $ composer require rybakit/callable-arguments-resolver:~1.0@dev
 ```php
 use CallableArgumentsResolver as f;
 
-$informer = function ($username, DateTime $lastLoginDate, $greeting = 'Hello %s!') {
+$informer = function ($username, DateTime $date, $greeting = 'Hello %s!') {
     printf($greeting, $username);
-    printf("\nYour last login was on the %s.", $lastLoginDate->format('jS \of F Y'));
+    printf("\nToday is the %s.", $date->format('jS \of F Y'));
 };
 
 $parameters = [
@@ -41,7 +41,7 @@ The above example will output something similar to:
 
 ```
 Welcome Stranger!
-Your last login was on the 3rd of September 2013.
+Today is the 3rd of September 2013.
 ```
 
 In a case you need to resolve arguments more than once for the same callable during
