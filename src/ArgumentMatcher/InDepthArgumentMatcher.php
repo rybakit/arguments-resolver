@@ -39,7 +39,7 @@ class InDepthArgumentMatcher implements ArgumentMatcher
     }
 
     /**
-     * Checks if the value match the parameter type.
+     * Checks if the value matches the parameter type.
      *
      * @param \ReflectionParameter $parameter
      * @param mixed                $value
