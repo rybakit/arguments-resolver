@@ -129,7 +129,7 @@ function foo($a, $b) {}
 
 $resolver->resolveArguments('foo', [
     ...
-    'c',
+    'c' => 3,
     'a' => 1,    // $a
     'b' => 2,    // $b
     ...
