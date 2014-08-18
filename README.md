@@ -82,15 +82,15 @@ Here are some examples:
 *Argument type*
 
 ```php
-function foo(array $array, stdClass $obj, callable $callable) {}
+function foo(array $array, stdClass $object, callable $callable) {}
 
 $resolver->resolveArguments('foo', [
     ...
-    function () {},
+    function () {},    // $callable
     ...
-    new stdClass(),
+    new stdClass(),    // $object
     ...
-    [42],
+    [42],              // $array
     ...
 ]);
 ```
@@ -103,9 +103,9 @@ function foo(Exception $e, RuntimeException $re) {}
 
 $resolver->resolveArguments('foo', [
     ...
-    new RuntimeException(),
+    new RuntimeException(),    // $re
     ...
-    new Exception(),
+    new Exception(),           // $e
     ...
 ]);
 ```
@@ -116,8 +116,8 @@ $resolver->resolveArguments('foo', [
 function foo($a, $b) {}
 
 $resolver->resolveArguments('foo', [
-    'a',
-    'b',
+    1,   // $a
+    2,   // $b
     ...
 ]);
 ```
@@ -130,8 +130,8 @@ function foo($a, $b) {}
 $resolver->resolveArguments('foo', [
     ...
     'c',
-    'a' => 'a',
-    'b' => 'b',
+    'a' => 1,    // $a
+    'b' => 2,    // $b
     ...
 ]);
 ```
