@@ -98,13 +98,13 @@ class InDepthArgumentMatcher implements ArgumentMatcher
      */
     protected static function compareParameterClasses(\ReflectionParameter $a, \ReflectionParameter $b)
     {
-        $aClass = $a->getClass();
-        $bClass = $b->getClass();
+        $a = $a->getClass();
+        $b = $b->getClass();
 
-        if ($aClass && $bClass) {
-            return $aClass->isSubclassOf($bClass->name) ? -1 : (int) $bClass->isSubclassOf($aClass->name);
+        if ($a && $b) {
+            return $a->isSubclassOf($b->name) ? -1 : (int) $b->isSubclassOf($a->name);
         }
 
-        return !$aClass - !$bClass;
+        return !$a - !$b;
     }
 }
