@@ -58,18 +58,6 @@ trait InDepthResolvingTrait
     /**
      * @dataProvider provideCallableData
      */
-    public function testInDepthResolvingOptional($callableType, ArgumentMatcher $matcher)
-    {
-        $parameters = ['foo', 'bar'];
-        $arguments = array_merge($parameters, [1, 2]);
-
-        $this->assertArguments($arguments, $parameters, $callableType, 'optional', $matcher);
-    }
-
-
-    /**
-     * @dataProvider provideCallableData
-     */
     public function testInDepthResolvingObjectSameType($callableType, ArgumentMatcher $matcher)
     {
         $bar = (object) ['name' => 'bar'];

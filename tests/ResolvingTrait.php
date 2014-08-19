@@ -35,6 +35,17 @@ trait ResolvingTrait
     /**
      * @dataProvider provideCallableData
      */
+    public function testResolvingOptional($callableType, ArgumentMatcher $matcher)
+    {
+        $parameters = ['mixed1' => 'foo', 'mixed2' => 'bar'];
+        $arguments = ['foo', 'bar', 1, 2];
+
+        $this->assertArguments($arguments, $parameters, $callableType, 'optional', $matcher);
+    }
+
+    /**
+     * @dataProvider provideCallableData
+     */
     public function testResolvingEmpty($callableType, ArgumentMatcher $matcher)
     {
         $parameters = ['foo'];
