@@ -75,9 +75,9 @@ call_user_func_array(
 By default, arguments are resolved based on "in-depth" matching strategy.
 It means that a decision about whether an argument matched the parameter value or not is influenced
 by multiple factors, namely the argument's type, the class hierarchy (if it's an object),
-the argument position and its name.
+the argument name and the argument position.
 
-Here are some examples:
+To clarify, consider each circumstance in turn:
 
 *Argument type*
 
@@ -95,7 +95,6 @@ $resolver->resolveArguments('foo', [
 ]);
 ```
 
-
 *Class hierarchy*
 
 ```php
@@ -106,18 +105,6 @@ $resolver->resolveArguments('foo', [
     new RuntimeException(),    // $re
     ...
     new Exception(),           // $e
-    ...
-]);
-```
-
-*Argument position*
-
-```php
-function foo($a, $b) {}
-
-$resolver->resolveArguments('foo', [
-    1,   // $a
-    2,   // $b
     ...
 ]);
 ```
@@ -136,6 +123,17 @@ $resolver->resolveArguments('foo', [
 ]);
 ```
 
+*Argument position*
+
+```php
+function foo($a, $b) {}
+
+$resolver->resolveArguments('foo', [
+    1,   // $a
+    2,   // $b
+    ...
+]);
+```
 
 #### KeyArgumentMatcher
 
