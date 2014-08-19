@@ -112,7 +112,7 @@ trait InDepthResolvingTrait
 
     /**
      * @dataProvider provideCallableDataWithInvalidTypes
-     * @expectedException \InvalidArgumentException
+     * @expectedException \CallableArgumentsResolver\UnresolvableArgumentException
      * @expectedExceptionMessage Unable to resolve argument
      */
     public function testInDepthResolvingThrowsExceptionOnInvalidType($callableType, ArgumentMatcher $matcher, $functionName, $parameters)

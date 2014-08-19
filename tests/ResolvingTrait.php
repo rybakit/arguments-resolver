@@ -55,7 +55,7 @@ trait ResolvingTrait
 
     /**
      * @dataProvider provideCallableData
-     * @expectedException \InvalidArgumentException
+     * @expectedException \CallableArgumentsResolver\UnresolvableArgumentException
      * @expectedExceptionMessage Unable to resolve argument
      */
     public function testResolvingThrowsExceptionOnEmptyParameters($callableType, ArgumentMatcher $matcher)

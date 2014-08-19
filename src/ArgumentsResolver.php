@@ -34,7 +34,7 @@ class ArgumentsResolver
      *
      * @return array
      *
-     * @throws \InvalidArgumentException
+     * @throws UnresolvableArgumentException
      */
     public function resolveArguments(array $parameters)
     {
@@ -58,12 +58,7 @@ class ArgumentsResolver
                 continue;
             }
 
-            throw new \InvalidArgumentException(sprintf(
-                'Unable to resolve argument $%s (#%d) of %s.',
-                $parameter->name,
-                $parameter->getPosition(),
-                $this->getCallableName()
-            ));
+            throw new UnresolvableArgumentException($parameter);
         }
 
         return $arguments;
@@ -81,21 +76,5 @@ class ArgumentsResolver
         }
 
         return $this->parameters;
-    }
-
-    /**
-     * Returns the callable name.
-     *
-     * @return string
-     */
-    private function getCallableName()
-    {
-        $name = $this->reflection->name.'()';
-
-        if ($this->reflection instanceof \ReflectionMethod) {
-            $name = $this->reflection->getDeclaringClass()->name.'::'.$name;
-        }
-
-        return $name;
     }
 }
