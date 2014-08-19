@@ -6,12 +6,14 @@ class UnresolvableArgumentException extends \InvalidArgumentException
 {
     public function __construct(\ReflectionParameter $parameter, $message = null, $code = null, \Exception $previous = null)
     {
-        $message = null !== $message ?: sprintf(
-            'Unable to resolve argument $%s (#%d) of %s.',
-            $parameter->name,
-            $parameter->getPosition(),
-            static::getFunctionName($parameter->getDeclaringFunction())
-        );
+        if (null === $message) {
+            $message = sprintf(
+                'Unable to resolve argument $%s (#%d) of %s.',
+                $parameter->name,
+                $parameter->getPosition(),
+                static::getFunctionName($parameter->getDeclaringFunction())
+            );
+        }
 
         parent::__construct($message, $code, $previous);
     }
