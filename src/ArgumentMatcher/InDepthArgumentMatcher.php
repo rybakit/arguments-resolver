@@ -101,14 +101,10 @@ class InDepthArgumentMatcher implements ArgumentMatcher
         $aClass = $a->getClass();
         $bClass = $b->getClass();
 
-        if (!$aClass && !$bClass) {
-            return 0;
+        if ($aClass && $bClass) {
+            return $aClass->isSubclassOf($bClass->name) ? -1 : (int) $bClass->isSubclassOf($aClass->name);
         }
 
-        if (!$aClass || !$bClass) {
-            return $aClass ? -1 : 1;
-        }
-
-        return $aClass->isSubclassOf($bClass->name) ? -1 : (int) $bClass->isSubclassOf($aClass->name);
+        return !$aClass - !$bClass;
     }
 }
