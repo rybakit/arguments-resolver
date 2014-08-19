@@ -64,7 +64,7 @@ class InDepthArgumentMatcher implements ArgumentMatcher
     }
 
     /**
-     * Compares parameters by type and optionality.
+     * Compares parameters by type and position.
      *
      * @param \ReflectionParameter $a
      * @param \ReflectionParameter $b
@@ -73,10 +73,6 @@ class InDepthArgumentMatcher implements ArgumentMatcher
      */
     protected static function compareParameters(\ReflectionParameter $a, \ReflectionParameter $b)
     {
-        if ($a->isOptional() ^ $b->isOptional()) {
-            return $a->isOptional() << 1 - 1;
-        }
-
         if (0 !== $result = self::compareParameterClasses($a, $b)) {
             return $result;
         }
