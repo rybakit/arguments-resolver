@@ -11,7 +11,7 @@ class UnresolvableArgumentException extends \InvalidArgumentException
 
     public function __construct(\ReflectionParameter $parameter, $message = null, $code = null, \Exception $previous = null)
     {
-        if (null !== $message) {
+        if (null === $message) {
             $message = sprintf(
                 'Unable to resolve argument $%s (#%d) of %s.',
                 $parameter->name,
