@@ -91,7 +91,7 @@ $resolver = new CallableArgumentsResolver($callable, $matcher);
 
 #### InDepthArgumentMatcher
 
-The `InDepthArgumentMatcher` makes a decision about whether an argument matched the parameter value or not
+In the `InDepthArgumentMatcher`, the decision about whether an argument matched the parameter value or not
 is influenced by multiple factors, namely the argument's type, the class hierarchy (if it's an object),
 the argument name and the argument position.
 
