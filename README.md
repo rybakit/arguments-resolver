@@ -7,6 +7,7 @@ CallableArgumentsResolver
 CallableArgumentsResolver allows you to determine the arguments to pass to the callable.
 
 
+
 ## Installation
 
 The recommended way to install CallableArgumentsResolver is through [Composer](http://getcomposer.org):
@@ -14,6 +15,7 @@ The recommended way to install CallableArgumentsResolver is through [Composer](h
 ```sh
 $ composer require rybakit/callable-arguments-resolver:~1.0@dev
 ```
+
 
 
 ## Usage example
@@ -68,13 +70,29 @@ call_user_func_array(
 ```
 
 
+
 ## Argument matchers
+
+Argument matchers are used to encapsulate the logic about how to map callable arguments into a passed parameters.
+The library ships with two matchers, the `InDepthArgumentMatcher` and `KeyArgumentMatcher`. By default,
+the `InDepthArgumentMatcher` is used. To use a different matcher, simple pass it as the last argument
+to the `resolve_arguments` function or `CallableArgumentsResolver` constructor:
+
+```php
+use CallableArgumentsResolver\ArgumentMatcher\KeyArgumentMatcher;
+...
+
+$matcher = new KeyArgumentMatcher();
+
+$args = f\resolve_arguments($callable, $parameters, $matcher);
+
+$resolver = new CallableArgumentsResolver($callable, $matcher);
+```
 
 #### InDepthArgumentMatcher
 
-By default, arguments are resolved based on "in-depth" matching strategy.
-It means that a decision about whether an argument matched the parameter value or not is influenced
-by multiple factors, namely the argument's type, the class hierarchy (if it's an object),
+The `InDepthArgumentMatcher` makes a decision about whether an argument matched the parameter value or not
+is influenced by multiple factors, namely the argument's type, the class hierarchy (if it's an object),
 the argument name and the argument position.
 
 To clarify, consider each circumstance in turn:
@@ -137,12 +155,26 @@ $resolver->resolveArguments('foo', [
 
 #### KeyArgumentMatcher
 
-...
+The `KeyArgumentMatcher` is a very simple matcher which does the matching only by the argument name.
+Therefore this requires parameters to be an associative array:
+
+```php
+function foo($a, array $b, $c = null) {}
+
+$resolver->resolveArguments('foo', [
+    ...
+    'b' => [],       // $b
+    'a' => 1,        // $a
+    'c' => 'bar',    // $c
+    ...
+]);
+```
 
 
 #### Custom argument matcher
 
-...
+Creating your own matcher is as easy as implementing the [ArgumentMatcher](src/ArgumentMatcher/ArgumentMatcher) interface.
+
 
 
 ## Tests
@@ -159,6 +191,7 @@ You can then run the tests:
 ```sh
 $ phpunit
 ```
+
 
 
 ## License
