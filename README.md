@@ -73,7 +73,7 @@ call_user_func_array(
 
 ## Argument matchers
 
-Argument matchers are used to encapsulate the logic about how to map callable arguments into a passed parameters.
+Argument matchers are used to encapsulate the logic about how to map callable arguments into the passed parameters.
 The library ships with two matchers, the `InDepthArgumentMatcher` and `KeyArgumentMatcher`. By default,
 the `InDepthArgumentMatcher` is used. To use a different matcher, simple pass it as the last argument
 to the `resolve_arguments` function or `CallableArgumentsResolver` constructor:
