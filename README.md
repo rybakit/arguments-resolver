@@ -173,7 +173,7 @@ $resolver->resolveArguments('foo', [
 
 #### Custom argument matcher
 
-Creating your own matcher is as easy as implementing the [ArgumentMatcher](src/ArgumentMatcher/ArgumentMatcher) interface.
+Creating your own matcher is as easy as implementing the [ArgumentMatcher](src/ArgumentMatcher/ArgumentMatcher.php) interface.
 
 
 
