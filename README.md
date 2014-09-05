@@ -80,6 +80,7 @@ to the `resolve_arguments` function or `CallableArgumentsResolver` constructor:
 
 ```php
 use CallableArgumentsResolver\Adapter\KeyAdapter;
+
 ...
 
 $args = f\resolve_arguments($callable, $parameters, new KeyAdapter());
