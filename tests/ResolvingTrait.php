@@ -2,26 +2,26 @@
 
 namespace CallableArgumentsResolver\Tests;
 
-use CallableArgumentsResolver\ArgumentMatcher\ArgumentMatcher;
-use CallableArgumentsResolver\ArgumentMatcher\InDepthArgumentMatcher;
-use CallableArgumentsResolver\ArgumentMatcher\KeyArgumentMatcher;
+use CallableArgumentsResolver\Adapter\Adapter;
+use CallableArgumentsResolver\Adapter\InDepthAdapter;
+use CallableArgumentsResolver\Adapter\KeyAdapter;
 
 trait ResolvingTrait
 {
     use InDepthResolvingTrait;
 
-    protected static function getMatchers()
+    protected static function getAdapters()
     {
         return [
-            'in_depth'  => new InDepthArgumentMatcher(),
-            'key'       => new KeyArgumentMatcher(),
+            'in_depth'  => new InDepthAdapter(),
+            'key'       => new KeyAdapter(),
         ];
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testResolvingVariousByName($callableType, ArgumentMatcher $matcher)
+    public function testResolvingVariousByName($callableType, Adapter $adapter)
     {
         $bar = new \stdClass();
         $baz = ['baz'];
@@ -29,28 +29,28 @@ trait ResolvingTrait
         $parameters = ['qux' => 'qux', 'baz' => $baz, 'bar' => $bar, 'foo' => 'foo'];
         $arguments = ['foo', $bar, $baz, 'qux'];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'various', $matcher);
+        $this->assertArguments($arguments, $parameters, $callableType, 'various', $adapter);
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testResolvingOptional($callableType, ArgumentMatcher $matcher)
+    public function testResolvingOptional($callableType, Adapter $adapter)
     {
         $parameters = ['mixed1' => 'foo', 'mixed2' => 'bar'];
         $arguments = ['foo', 'bar', 1, 2];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'optional', $matcher);
+        $this->assertArguments($arguments, $parameters, $callableType, 'optional', $adapter);
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testResolvingEmpty($callableType, ArgumentMatcher $matcher)
+    public function testResolvingEmpty($callableType, Adapter $adapter)
     {
         $parameters = ['foo'];
 
-        $this->assertArguments([], $parameters, $callableType, 'empty', $matcher);
+        $this->assertArguments([], $parameters, $callableType, 'empty', $adapter);
     }
 
     /**
@@ -58,36 +58,36 @@ trait ResolvingTrait
      * @expectedException \CallableArgumentsResolver\UnresolvableArgumentException
      * @expectedExceptionMessage Unable to resolve argument
      */
-    public function testResolvingThrowsExceptionOnEmptyParameters($callableType, ArgumentMatcher $matcher)
+    public function testResolvingThrowsExceptionOnEmptyParameters($callableType, Adapter $adapter)
     {
-        $this->resolveArguments([], $callableType, 'various', $matcher);
+        $this->resolveArguments([], $callableType, 'various', $adapter);
     }
 
     public function provideCallableData($testMethodName)
     {
-        $matchers = static::getMatchers();
+        $adapters = static::getAdapters();
 
         if (preg_match('/test(.+?)Resolving/', $testMethodName, $matches)) {
-            $matcherName = strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $matches[1]));
-            $matchers = [$matcherName => $matchers[$matcherName]];
+            $adapterName = strtolower(preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $matches[1]));
+            $adapters = [$adapterName => $adapters[$adapterName]];
         }
 
         $data = [];
         foreach (CallableTypes::getAll() as $type) {
-            foreach ($matchers as $matcher) {
-                $data[] = [$type, $matcher];
+            foreach ($adapters as $adapter) {
+                $data[] = [$type, $adapter];
             }
         }
 
         return $data;
     }
 
-    public function assertArguments(array $expected, array $actual, $type, $mode, ArgumentMatcher $matcher)
+    public function assertArguments(array $expected, array $actual, $type, $mode, Adapter $adapter)
     {
-        $this->assertSame($expected, $this->resolveArguments($actual, $type, $mode, $matcher));
+        $this->assertSame($expected, $this->resolveArguments($actual, $type, $mode, $adapter));
     }
 
-    abstract protected function resolveArguments(array $arguments, $type, $mode, ArgumentMatcher $matcher);
+    abstract protected function resolveArguments(array $arguments, $type, $mode, Adapter $adapter);
 
     /**
      * @see PHPUnit_Framework_Assert::assertSame()

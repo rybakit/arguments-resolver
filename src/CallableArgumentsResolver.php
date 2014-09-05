@@ -2,7 +2,7 @@
 
 namespace CallableArgumentsResolver;
 
-use CallableArgumentsResolver\ArgumentMatcher\ArgumentMatcher;
+use CallableArgumentsResolver\Adapter\Adapter;
 
 class CallableArgumentsResolver
 {
@@ -12,19 +12,19 @@ class CallableArgumentsResolver
     private $callable;
 
     /**
-     * @var ArgumentMatcher
+     * @var Adapter
      */
-    private $matcher;
+    private $adapter;
 
     /**
      * @var ArgumentsResolver
      */
     private $resolver;
 
-    public function __construct(callable $callable, ArgumentMatcher $matcher = null)
+    public function __construct(callable $callable, Adapter $adapter = null)
     {
         $this->callable = $callable;
-        $this->matcher = $matcher;
+        $this->adapter = $adapter;
     }
 
     /**
@@ -55,7 +55,7 @@ class CallableArgumentsResolver
     private function getResolver()
     {
         if (!$this->resolver) {
-            $this->resolver = create_resolver($this->callable, $this->matcher);
+            $this->resolver = create_resolver($this->callable, $this->adapter);
         }
 
         return $this->resolver;

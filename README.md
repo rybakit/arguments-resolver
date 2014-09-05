@@ -71,27 +71,25 @@ call_user_func_array(
 
 
 
-## Argument matchers
+## Adapters
 
-Argument matchers are used to encapsulate the logic about how to map callable arguments into the passed parameters.
-The library ships with two matchers, the `InDepthArgumentMatcher` and `KeyArgumentMatcher`. By default,
-the `InDepthArgumentMatcher` is used. To use a different matcher, simple pass it as the last argument
+Adapters are used to encapsulate the logic about how to resolve callable arguments into the passed parameters.
+The library ships with two adapters, the `InDepthAdapter` and `KeyAdapter`. By default,
+the `InDepthAdapter` is used. To use a different adapter, simple pass it as the last argument
 to the `resolve_arguments` function or `CallableArgumentsResolver` constructor:
 
 ```php
-use CallableArgumentsResolver\ArgumentMatcher\KeyArgumentMatcher;
+use CallableArgumentsResolver\Adapter\KeyAdapter;
 ...
 
-$matcher = new KeyArgumentMatcher();
-
-$args = f\resolve_arguments($callable, $parameters, $matcher);
-
-$resolver = new CallableArgumentsResolver($callable, $matcher);
+$args = f\resolve_arguments($callable, $parameters, new KeyAdapter());
+// or
+$resolver = new CallableArgumentsResolver($callable, new KeyAdapter());
 ```
 
-#### InDepthArgumentMatcher
+#### InDepthAdapter
 
-In the `InDepthArgumentMatcher`, the decision about whether an argument matched the parameter value or not
+In the `InDepthAdapter`, the decision about whether an argument matched the parameter value or not
 is influenced by multiple factors, namely the argument's type, the class hierarchy (if it's an object),
 the argument name and the argument position.
 
@@ -153,9 +151,9 @@ $resolver->resolveArguments('foo', [
 ]);
 ```
 
-#### KeyArgumentMatcher
+#### KeyAdapter
 
-The `KeyArgumentMatcher` is a very simple matcher which does the matching only by the argument name.
+The `KeyAdapter` is a very simple adapter which does the matching only by the argument name.
 Therefore this requires parameters to be an associative array:
 
 ```php
@@ -171,9 +169,9 @@ $resolver->resolveArguments('foo', [
 ```
 
 
-#### Custom argument matcher
+#### Custom adapter
 
-Creating your own matcher is as easy as implementing the [ArgumentMatcher](src/ArgumentMatcher/ArgumentMatcher.php) interface.
+Creating your own adapter is as easy as implementing the [Adapter](src/Adapter/Adapter.php) interface.
 
 
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace CallableArgumentsResolver\ArgumentMatcher;
+namespace CallableArgumentsResolver\Adapter;
 
-class InDepthArgumentMatcher implements ArgumentMatcher
+class InDepthAdapter implements Adapter
 {
     /**
      * {@inheritdoc}
      */
-    public function filter(array $parameters)
+    public function prepare(array $parameters)
     {
         uasort($parameters, [__CLASS__, 'compareParameters']);
 
@@ -17,7 +17,7 @@ class InDepthArgumentMatcher implements ArgumentMatcher
     /**
      * {@inheritdoc}
      */
-    public function match(\ReflectionParameter $parameter, array $parameters)
+    public function resolve(\ReflectionParameter $parameter, array $parameters)
     {
         $found = false;
 
@@ -27,11 +27,11 @@ class InDepthArgumentMatcher implements ArgumentMatcher
             }
 
             if ($key === $parameter->name) {
-                return $key;
+                return [$key, $value];
             }
 
             if (false === $found) {
-                $found = $key;
+                $found = [$key, $value];
             }
         }
 

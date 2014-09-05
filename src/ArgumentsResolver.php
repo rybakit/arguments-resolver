@@ -2,7 +2,7 @@
 
 namespace CallableArgumentsResolver;
 
-use CallableArgumentsResolver\ArgumentMatcher\ArgumentMatcher;
+use CallableArgumentsResolver\Adapter\Adapter;
 
 class ArgumentsResolver
 {
@@ -12,19 +12,19 @@ class ArgumentsResolver
     private $reflection;
 
     /**
-     * @var ArgumentMatcher
+     * @var Adapter
      */
-    private $matcher;
+    private $adapter;
 
     /**
      * @var \ReflectionParameter[]
      */
     private $parameters;
 
-    public function __construct(\ReflectionFunctionAbstract $reflection, ArgumentMatcher $matcher)
+    public function __construct(\ReflectionFunctionAbstract $reflection, Adapter $adapter)
     {
         $this->reflection = $reflection;
-        $this->matcher = $matcher;
+        $this->adapter = $adapter;
     }
 
     /**
@@ -45,11 +45,11 @@ class ArgumentsResolver
         $arguments = array_fill(0, $number, null);
 
         foreach ($this->getParameters() as $pos => $parameter) {
-            $key = $this->matcher->match($parameter, $parameters);
+            $result = $this->adapter->resolve($parameter, $parameters);
 
-            if (false !== $key) {
-                $arguments[$pos] = $parameters[$key];
-                unset($parameters[$key]);
+            if ($result) {
+                $arguments[$pos] = $result[1];
+                unset($parameters[$result[0]]);
                 continue;
             }
 
@@ -72,7 +72,7 @@ class ArgumentsResolver
     private function getParameters()
     {
         if (null === $this->parameters) {
-            $this->parameters = $this->matcher->filter($this->reflection->getParameters());
+            $this->parameters = $this->adapter->prepare($this->reflection->getParameters());
         }
 
         return $this->parameters;

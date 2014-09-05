@@ -2,24 +2,24 @@
 
 namespace CallableArgumentsResolver\Tests;
 
-use CallableArgumentsResolver\ArgumentMatcher\ArgumentMatcher;
+use CallableArgumentsResolver\Adapter\Adapter;
 
 trait InDepthResolvingTrait
 {
     /**
      * @dataProvider provideCallableData
      */
-    public function testInDepthResolvingVariousOrdered($callableType, ArgumentMatcher $matcher)
+    public function testInDepthResolvingVariousOrdered($callableType, Adapter $adapter)
     {
         $parameters = ['foo', new \stdClass(), ['baz'], 'qux'];
 
-        $this->assertArguments($parameters, $parameters, $callableType, 'various', $matcher);
+        $this->assertArguments($parameters, $parameters, $callableType, 'various', $adapter);
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testInDepthResolvingVariousUnordered($callableType, ArgumentMatcher $matcher)
+    public function testInDepthResolvingVariousUnordered($callableType, Adapter $adapter)
     {
         $bar = new \stdClass();
         $baz = ['baz'];
@@ -27,24 +27,24 @@ trait InDepthResolvingTrait
         $parameters = ['foo', 'qux', $baz, $bar];
         $arguments = ['foo', $bar, $baz, 'qux'];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'various', $matcher);
+        $this->assertArguments($arguments, $parameters, $callableType, 'various', $adapter);
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testInDepthResolvingVariousOptional($callableType, ArgumentMatcher $matcher)
+    public function testInDepthResolvingVariousOptional($callableType, Adapter $adapter)
     {
         $parameters = ['foo', new \stdClass()];
         $arguments = array_merge($parameters, [[], null]);
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'various', $matcher);
+        $this->assertArguments($arguments, $parameters, $callableType, 'various', $adapter);
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testInDepthResolvingVariousByNameAndType($callableType, ArgumentMatcher $matcher)
+    public function testInDepthResolvingVariousByNameAndType($callableType, Adapter $adapter)
     {
         $foo = (object) ['name' => 'foo'];
         $bar = (object) ['name' => 'bar'];
@@ -52,13 +52,13 @@ trait InDepthResolvingTrait
         $parameters = ['bar' => $bar, $foo];
         $arguments = [$foo, $bar, [], null];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'various', $matcher);
+        $this->assertArguments($arguments, $parameters, $callableType, 'various', $adapter);
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testInDepthResolvingObjectSameType($callableType, ArgumentMatcher $matcher)
+    public function testInDepthResolvingObjectSameType($callableType, Adapter $adapter)
     {
         $bar = (object) ['name' => 'bar'];
         $qux = (object) ['name' => 'qux'];
@@ -66,13 +66,13 @@ trait InDepthResolvingTrait
         $parameters = [$bar, 'foo', $qux, 'baz'];
         $arguments = ['foo', $bar, 'baz', $qux];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'object_same', $matcher);
+        $this->assertArguments($arguments, $parameters, $callableType, 'object_same', $adapter);
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testInDepthResolvingObjectHierarchyType($callableType, ArgumentMatcher $matcher)
+    public function testInDepthResolvingObjectHierarchyType($callableType, Adapter $adapter)
     {
         $bar = new \Exception();
         $qux = new \RuntimeException();
@@ -80,13 +80,13 @@ trait InDepthResolvingTrait
         $parameters = [$qux, 'foo', $bar, 'baz'];
         $arguments = ['foo', $bar, 'baz', $qux];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'object_hierarchy', $matcher);
+        $this->assertArguments($arguments, $parameters, $callableType, 'object_hierarchy', $adapter);
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testInDepthResolvingObjectHierarchyTypeReverse($callableType, ArgumentMatcher $matcher)
+    public function testInDepthResolvingObjectHierarchyTypeReverse($callableType, Adapter $adapter)
     {
         $bar = new \RuntimeException();
         $qux = new \Exception();
@@ -94,20 +94,20 @@ trait InDepthResolvingTrait
         $parameters = [$qux, 'foo', $bar, 'baz'];
         $arguments = ['foo', $bar, 'baz', $qux];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'object_hierarchy_reverse', $matcher);
+        $this->assertArguments($arguments, $parameters, $callableType, 'object_hierarchy_reverse', $adapter);
     }
 
     /**
      * @dataProvider provideCallableData
      */
-    public function testInDepthResolvingCallable($callableType, ArgumentMatcher $matcher)
+    public function testInDepthResolvingCallable($callableType, Adapter $adapter)
     {
         $bar = function () {};
 
         $parameters = [$bar, 'foo', 'baz'];
         $arguments = ['foo', $bar, 'baz'];
 
-        $this->assertArguments($arguments, $parameters, $callableType, 'callable', $matcher);
+        $this->assertArguments($arguments, $parameters, $callableType, 'callable', $adapter);
     }
 
     /**
@@ -115,9 +115,9 @@ trait InDepthResolvingTrait
      * @expectedException \CallableArgumentsResolver\UnresolvableArgumentException
      * @expectedExceptionMessage Unable to resolve argument
      */
-    public function testInDepthResolvingThrowsExceptionOnInvalidType($callableType, ArgumentMatcher $matcher, $functionName, $parameters)
+    public function testInDepthResolvingThrowsExceptionOnInvalidType($callableType, Adapter $adapter, $functionName, $parameters)
     {
-        $this->resolveArguments($parameters, $callableType, $functionName, $matcher);
+        $this->resolveArguments($parameters, $callableType, $functionName, $adapter);
     }
 
     public function provideCallableDataWithInvalidTypes($testMethodName)
@@ -135,7 +135,7 @@ trait InDepthResolvingTrait
 
     abstract public function provideCallableData($testMethodName);
 
-    abstract public function assertArguments(array $expected, array $actual, $type, $mode, ArgumentMatcher $matcher);
+    abstract public function assertArguments(array $expected, array $actual, $type, $mode, Adapter $adapter);
 
-    abstract protected function resolveArguments(array $arguments, $type, $mode, ArgumentMatcher $matcher);
+    abstract protected function resolveArguments(array $arguments, $type, $mode, Adapter $adapter);
 }

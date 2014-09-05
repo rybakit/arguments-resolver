@@ -2,36 +2,36 @@
 
 namespace CallableArgumentsResolver;
 
-use CallableArgumentsResolver\ArgumentMatcher\ArgumentMatcher;
-use CallableArgumentsResolver\ArgumentMatcher\InDepthArgumentMatcher;
+use CallableArgumentsResolver\Adapter\Adapter;
+use CallableArgumentsResolver\Adapter\InDepthAdapter;
 
 /**
  * Resolves callable arguments.
  *
- * @param callable             $callable
- * @param array                $parameters
- * @param ArgumentMatcher|null $matcher
+ * @param callable     $callable
+ * @param array        $parameters
+ * @param Adapter|null $adapter
  *
  * @return array
  */
-function resolve_arguments(callable $callable, array $parameters, ArgumentMatcher $matcher = null)
+function resolve_arguments(callable $callable, array $parameters, Adapter $adapter = null)
 {
-    return create_resolver($callable, $matcher)->resolveArguments($parameters);
+    return create_resolver($callable, $adapter)->resolveArguments($parameters);
 }
 
 /**
  * Creates an arguments resolver.
  *
- * @param callable             $callable
- * @param ArgumentMatcher|null $matcher
+ * @param callable     $callable
+ * @param Adapter|null $adapter
  *
  * @return ArgumentsResolver
  */
-function create_resolver(callable $callable, ArgumentMatcher $matcher = null)
+function create_resolver(callable $callable, Adapter $adapter = null)
 {
     $reflection = create_callable_reflection($callable);
 
-    return new ArgumentsResolver($reflection, $matcher ?: new InDepthArgumentMatcher());
+    return new ArgumentsResolver($reflection, $adapter ?: new InDepthAdapter());
 }
 
 /**
