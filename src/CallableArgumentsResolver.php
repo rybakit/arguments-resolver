@@ -1,8 +1,8 @@
 <?php
 
-namespace CallableArgumentsResolver;
+namespace ArgumentsResolver;
 
-use CallableArgumentsResolver\Adapter\Adapter;
+use ArgumentsResolver\Adapter\Adapter;
 
 class CallableArgumentsResolver
 {

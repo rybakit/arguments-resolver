@@ -1,8 +1,8 @@
 <?php
 
-namespace CallableArgumentsResolver\Tests;
+namespace ArgumentsResolver\Tests;
 
-use CallableArgumentsResolver\Adapter\Adapter;
+use ArgumentsResolver\Adapter\Adapter;
 
 trait InDepthResolvingTrait
 {
@@ -112,7 +112,7 @@ trait InDepthResolvingTrait
 
     /**
      * @dataProvider provideCallableDataWithInvalidTypes
-     * @expectedException \CallableArgumentsResolver\UnresolvableArgumentException
+     * @expectedException \ArgumentsResolver\UnresolvableArgumentException
      * @expectedExceptionMessage Unable to resolve argument
      */
     public function testInDepthResolvingThrowsExceptionOnInvalidType($callableType, Adapter $adapter, $functionName, $parameters)

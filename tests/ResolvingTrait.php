@@ -1,10 +1,10 @@
 <?php
 
-namespace CallableArgumentsResolver\Tests;
+namespace ArgumentsResolver\Tests;
 
-use CallableArgumentsResolver\Adapter\Adapter;
-use CallableArgumentsResolver\Adapter\InDepthAdapter;
-use CallableArgumentsResolver\Adapter\KeyAdapter;
+use ArgumentsResolver\Adapter\Adapter;
+use ArgumentsResolver\Adapter\InDepthAdapter;
+use ArgumentsResolver\Adapter\KeyAdapter;
 
 trait ResolvingTrait
 {
@@ -55,7 +55,7 @@ trait ResolvingTrait
 
     /**
      * @dataProvider provideCallableData
-     * @expectedException \CallableArgumentsResolver\UnresolvableArgumentException
+     * @expectedException \ArgumentsResolver\UnresolvableArgumentException
      * @expectedExceptionMessage Unable to resolve argument
      */
     public function testResolvingThrowsExceptionOnEmptyParameters($callableType, Adapter $adapter)

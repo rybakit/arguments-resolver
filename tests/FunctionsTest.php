@@ -1,9 +1,9 @@
 <?php
 
-namespace CallableArgumentsResolver\Tests;
+namespace ArgumentsResolver\Tests;
 
-use CallableArgumentsResolver as f;
-use CallableArgumentsResolver\Adapter\Adapter;
+use ArgumentsResolver as ar;
+use ArgumentsResolver\Adapter\Adapter;
 
 class FunctionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,6 +13,6 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     {
         $callable = create_callable($type, $mode);
 
-        return f\resolve_arguments($callable, $arguments, $adapter);
+        return ar\resolve_arguments($callable, $arguments, $adapter);
     }
 }

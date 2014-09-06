@@ -1,6 +1,6 @@
 <?php
 
-namespace CallableArgumentsResolver;
+namespace ArgumentsResolver;
 
 class UnresolvableArgumentException extends \InvalidArgumentException
 {

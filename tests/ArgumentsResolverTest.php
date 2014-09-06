@@ -1,9 +1,9 @@
 <?php
 
-namespace CallableArgumentsResolver\Tests;
+namespace ArgumentsResolver\Tests;
 
-use CallableArgumentsResolver\Adapter\Adapter;
-use CallableArgumentsResolver\ArgumentsResolver;
+use ArgumentsResolver\Adapter\Adapter;
+use ArgumentsResolver\ArgumentsResolver;
 
 class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 {

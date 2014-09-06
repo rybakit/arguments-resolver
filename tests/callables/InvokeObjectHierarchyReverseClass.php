@@ -1,6 +1,6 @@
 <?php
 
-namespace CallableArgumentsResolver\Tests;
+namespace ArgumentsResolver\Tests;
 
 class InvokeObjectHierarchyReverseClass
 {

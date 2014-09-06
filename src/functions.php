@@ -1,9 +1,9 @@
 <?php
 
-namespace CallableArgumentsResolver;
+namespace ArgumentsResolver;
 
-use CallableArgumentsResolver\Adapter\Adapter;
-use CallableArgumentsResolver\Adapter\InDepthAdapter;
+use ArgumentsResolver\Adapter\Adapter;
+use ArgumentsResolver\Adapter\InDepthAdapter;
 
 /**
  * Resolves callable arguments.

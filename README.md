@@ -1,19 +1,19 @@
-CallableArgumentsResolver
+ArgumentsResolver
 =========================
-[![Build Status](https://secure.travis-ci.org/rybakit/callable-arguments-resolver.png?branch=master)](http://travis-ci.org/rybakit/callable-arguments-resolver)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rybakit/callable-arguments-resolver/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rybakit/callable-arguments-resolver/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/rybakit/callable-arguments-resolver/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rybakit/callable-arguments-resolver/?branch=master)
+[![Build Status](https://secure.travis-ci.org/rybakit/arguments-resolver.png?branch=master)](http://travis-ci.org/rybakit/arguments-resolver)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/?branch=master)
 
-CallableArgumentsResolver allows you to determine the arguments to pass to the callable.
+ArgumentsResolver allows you to determine the arguments to pass to a function or method.
 
 
 
 ## Installation
 
-The recommended way to install CallableArgumentsResolver is through [Composer](http://getcomposer.org):
+The recommended way to install ArgumentsResolver is through [Composer](http://getcomposer.org):
 
 ```sh
-$ composer require rybakit/callable-arguments-resolver:~1.0@dev
+$ composer require rybakit/arguments-resolver:~1.0@dev
 ```
 
 
@@ -21,7 +21,7 @@ $ composer require rybakit/callable-arguments-resolver:~1.0@dev
 ## Usage example
 
 ```php
-use CallableArgumentsResolver as f;
+use ArgumentsResolver as ar;
 
 $informer = function ($username, DateTime $date, $greeting = 'Hello %s!') {
     printf($greeting, $username);
@@ -36,7 +36,7 @@ $parameters = [
     'not an argument',
 ];
 
-call_user_func_array($informer, f\resolve_arguments($informer, $parameters));
+call_user_func_array($informer, ar\resolve_arguments($informer, $parameters));
 ```
 
 The above example will output something similar to:
@@ -50,7 +50,7 @@ In a case you need to resolve arguments more than once for the same callable dur
 the execution of the script, it's recommended to make use of the `CallableArgumentsResolver` class:
 
 ```php
-use CallableArgumentsResolver\CallableArgumentsResolver;
+use ArgumentsResolver\CallableArgumentsResolver;
 
 ...
 
@@ -79,7 +79,7 @@ the `InDepthAdapter` is used. To use a different adapter, simple pass it as the 
 to the `resolve_arguments` function or `CallableArgumentsResolver` constructor:
 
 ```php
-use CallableArgumentsResolver\Adapter\KeyAdapter;
+use ArgumentsResolver\Adapter\KeyAdapter;
 
 ...
 
@@ -178,7 +178,7 @@ Creating your own adapter is as easy as implementing the [Adapter](src/Adapter/A
 
 ## Tests
 
-CallableArgumentsResolver uses [PHPUnit](http://phpunit.de) for unit testing.
+ArgumentsResolver uses [PHPUnit](http://phpunit.de) for unit testing.
 In order to run the tests, you'll first need to setup the test suite using composer:
 
 ```sh
@@ -195,4 +195,4 @@ $ phpunit
 
 ## License
 
-CallableArgumentsResolver is released under the MIT License. See the bundled [LICENSE](LICENSE) file for details.
+ArgumentsResolver is released under the MIT License. See the bundled [LICENSE](LICENSE) file for details.

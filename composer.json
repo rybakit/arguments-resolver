@@ -1,8 +1,8 @@
 {
-    "name": "rybakit/callable-arguments-resolver",
-    "description": "CallableArgumentsResolver allows you to determine the arguments to pass to the callable.",
-    "keywords": ["callable arguments resolver"],
-    "homepage": "https://github.com/rybakit/callable-arguments-resolver",
+    "name": "rybakit/arguments-resolver",
+    "description": "ArgumentsResolver allows you to determine the arguments to pass to a function or method.",
+    "keywords": ["arguments resolver"],
+    "homepage": "https://github.com/rybakit/arguments-resolver",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "CallableArgumentsResolver\\": "src/"
+            "ArgumentsResolver\\": "src/"
         },
         "files": [
             "src/functions.php"
@@ -24,7 +24,7 @@
     },
     "autoload-dev" : {
         "psr-4": {
-            "CallableArgumentsResolver\\Tests\\": ["tests/", "tests/callables/"]
+            "ArgumentsResolver\\Tests\\": ["tests/", "tests/callables/"]
         },
         "files": [
             "tests/callables/functions.php",

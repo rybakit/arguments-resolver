@@ -1,6 +1,6 @@
 <?php
 
-namespace CallableArgumentsResolver\Adapter;
+namespace ArgumentsResolver\Adapter;
 
 class KeyAdapter implements Adapter
 {
