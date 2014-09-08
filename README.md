@@ -73,10 +73,11 @@ call_user_func_array(
 
 ## Adapters
 
-Adapters are used to encapsulate the logic about how to resolve callable arguments into the passed parameters.
-The library ships with two adapters, the `InDepthAdapter` and `KeyAdapter`. By default,
-the `InDepthAdapter` is used. To use a different adapter, simple pass it as the last argument
-to the `resolve_arguments` function or `CallableArgumentsResolver` constructor:
+Adapters are used to encapsulate the logic about how to resolve function/method arguments
+into the passed parameters. The library ships with two adapters, the `InDepthAdapter`
+and `KeyAdapter`. By default, the `InDepthAdapter` is used. To use a different adapter,
+simple pass it as the last argument to the `resolve_arguments` function
+or `CallableArgumentsResolver` constructor:
 
 ```php
 use ArgumentsResolver\Adapter\KeyAdapter;
