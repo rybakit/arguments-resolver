@@ -1,6 +1,6 @@
 ArgumentsResolver
 =========================
-[![Build Status](https://secure.travis-ci.org/rybakit/arguments-resolver.png?branch=master)](http://travis-ci.org/rybakit/arguments-resolver)
+[![Build Status](https://secure.travis-ci.org/rybakit/arguments-resolver.svg?branch=master)](http://travis-ci.org/rybakit/arguments-resolver)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/?branch=master)
 
@@ -134,8 +134,8 @@ function foo($a, $b) {}
 $resolver->resolveArguments('foo', [
     ...
     'c' => 3,
-    'a' => 1,    // $a
     'b' => 2,    // $b
+    'a' => 1,    // $a
     ...
 ]);
 ```
