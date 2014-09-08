@@ -5,7 +5,7 @@ namespace ArgumentsResolver\Adapter;
 interface Adapter
 {
     /**
-     * Returns a filtered array of the reflection parameters.
+     * Prepares arguments.
      *
      * @param \ReflectionParameter[] $parameters
      *
