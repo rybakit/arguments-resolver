@@ -15,7 +15,7 @@ abstract class ArgumentsResolver
     }
 
     /**
-     * Resolves callable arguments.
+     * Resolves function arguments.
      *
      * @param array $parameters
      *
