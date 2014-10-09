@@ -2,7 +2,7 @@
 
 namespace ArgumentsResolver\Tests;
 
-class CallableTypes
+class FunctionTypes
 {
     const METHOD            = 'method';
     const STATIC_METHOD     = 'static_method';

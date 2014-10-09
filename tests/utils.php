@@ -2,6 +2,8 @@
 
 namespace ArgumentsResolver\Tests;
 
+use ArgumentsResolver\Tests\Fixtures\TestClass;
+
 /**
  * Creates a callable based on the callable type and mode.
  *
@@ -15,23 +17,23 @@ namespace ArgumentsResolver\Tests;
 function create_callable($type, $mode)
 {
     switch ($type) {
-        case CallableTypes::METHOD:
+        case FunctionTypes::METHOD:
             return [new TestClass(), 'method'.camelize($mode)];
 
-        case CallableTypes::STATIC_METHOD:
-            return [__NAMESPACE__.'\TestClass', 'staticMethod'.camelize($mode)];
+        case FunctionTypes::STATIC_METHOD:
+            return [__NAMESPACE__.'\Fixtures\TestClass', 'staticMethod'.camelize($mode)];
 
-        case CallableTypes::INVOKED_METHOD:
-            return (new \ReflectionClass(__NAMESPACE__.'\Invoke'.camelize($mode).'Class'))->newInstance();
+        case FunctionTypes::INVOKED_METHOD:
+            return (new \ReflectionClass(__NAMESPACE__.'\Fixtures\Invoke'.camelize($mode).'Class'))->newInstance();
 
-        case CallableTypes::CLOSURE:
-            return (new \ReflectionFunction(__NAMESPACE__.'\function_'.$mode))->getClosure();
+        case FunctionTypes::CLOSURE:
+            return (new \ReflectionFunction(__NAMESPACE__.'\Fixtures\function_'.$mode))->getClosure();
 
-        case CallableTypes::FUNC:
+        case FunctionTypes::FUNC:
             return __NAMESPACE__.'\function_'.$mode;
     }
 
-    throw new \InvalidArgumentException(sprintf('Unsupported callable type "%s".', $type));
+    throw new \InvalidArgumentException(sprintf('Unsupported function type "%s".', $type));
 }
 
 /**
@@ -47,19 +49,19 @@ function create_callable($type, $mode)
 function create_callable_reflection($type, $mode)
 {
     switch ($type) {
-        case CallableTypes::METHOD:
-        case CallableTypes::STATIC_METHOD:
-            return new \ReflectionMethod(__NAMESPACE__.'\TestClass', 'staticMethod'.camelize($mode));
+        case FunctionTypes::METHOD:
+        case FunctionTypes::STATIC_METHOD:
+            return new \ReflectionMethod(__NAMESPACE__.'\Fixtures\TestClass', 'staticMethod'.camelize($mode));
 
-        case CallableTypes::INVOKED_METHOD:
-            return new \ReflectionMethod(__NAMESPACE__.'\Invoke'.camelize($mode).'Class', '__invoke');
+        case FunctionTypes::INVOKED_METHOD:
+            return new \ReflectionMethod(__NAMESPACE__.'\Fixtures\Invoke'.camelize($mode).'Class', '__invoke');
 
-        case CallableTypes::CLOSURE:
-        case CallableTypes::FUNC:
-            return new \ReflectionFunction(__NAMESPACE__.'\function_'.$mode);
+        case FunctionTypes::CLOSURE:
+        case FunctionTypes::FUNC:
+            return new \ReflectionFunction(__NAMESPACE__.'\Fixtures\function_'.$mode);
     }
 
-    throw new \InvalidArgumentException(sprintf('Unsupported callable type "%s".', $type));
+    throw new \InvalidArgumentException(sprintf('Unsupported function type "%s".', $type));
 }
 
 /**

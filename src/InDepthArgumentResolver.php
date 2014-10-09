@@ -1,28 +1,46 @@
 <?php
 
-namespace ArgumentsResolver\Adapter;
+namespace ArgumentsResolver;
 
-class InDepthAdapter implements Adapter
+class InDepthArgumentResolver extends ArgumentsResolver
 {
     /**
-     * {@inheritdoc}
+     * @var \ReflectionParameter[]
      */
-    public function prepare(array $parameters)
-    {
-        uasort($parameters, [__CLASS__, 'compareParameters']);
+    private $parameters;
 
-        return $parameters;
+    /**
+     * @param mixed $function
+     *
+     * @return static
+     */
+    public static function create($function)
+    {
+        return new static(Utils::createReflection($function));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function resolve(\ReflectionParameter $parameter, array $parameters)
+    protected function getParameters()
+    {
+        if (null === $this->parameters) {
+            $this->parameters = $this->reflection->getParameters();
+            uasort($this->parameters, [__CLASS__, 'compareParameters']);
+        }
+
+        return $this->parameters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function resolve(\ReflectionParameter $parameter, array $parameters)
     {
         $found = false;
 
         foreach ($parameters as $key => $value) {
-            if (!$this->matchType($parameter, $value)) {
+            if (!self::matchType($parameter, $value)) {
                 continue;
             }
 
@@ -46,7 +64,7 @@ class InDepthAdapter implements Adapter
      *
      * @return bool
      */
-    protected function matchType(\ReflectionParameter $parameter, $value)
+    protected static function matchType(\ReflectionParameter $parameter, $value)
     {
         if ($class = $parameter->getClass()) {
             return is_object($value) && $class->isInstance($value);

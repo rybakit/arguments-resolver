@@ -2,29 +2,16 @@
 
 namespace ArgumentsResolver;
 
-use ArgumentsResolver\Adapter\Adapter;
-
-class ArgumentsResolver
+abstract class ArgumentsResolver
 {
     /**
      * @var \ReflectionFunctionAbstract
      */
-    private $reflection;
+    protected $reflection;
 
-    /**
-     * @var Adapter
-     */
-    private $adapter;
-
-    /**
-     * @var \ReflectionParameter[]
-     */
-    private $parameters;
-
-    public function __construct(\ReflectionFunctionAbstract $reflection, Adapter $adapter)
+    public function __construct(\ReflectionFunctionAbstract $reflection)
     {
         $this->reflection = $reflection;
-        $this->adapter = $adapter;
     }
 
     /**
@@ -45,7 +32,7 @@ class ArgumentsResolver
         $arguments = array_fill(0, $number, null);
 
         foreach ($this->getParameters() as $pos => $parameter) {
-            $result = $this->adapter->resolve($parameter, $parameters);
+            $result = $this->resolve($parameter, $parameters);
 
             if ($result) {
                 $arguments[$pos] = $result[1];
@@ -69,12 +56,18 @@ class ArgumentsResolver
      *
      * @return \ReflectionParameter[]
      */
-    private function getParameters()
+    protected function getParameters()
     {
-        if (null === $this->parameters) {
-            $this->parameters = $this->adapter->prepare($this->reflection->getParameters());
-        }
-
-        return $this->parameters;
+        return $this->reflection->getParameters();
     }
+
+    /**
+     * Returns the [key, value] pair if the parameter is resolved or false otherwise.
+     *
+     * @param \ReflectionParameter $parameter
+     * @param array                $parameters
+     *
+     * @return array|bool
+     */
+    abstract protected function resolve(\ReflectionParameter $parameter, array $parameters);
 }

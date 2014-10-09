@@ -1,6 +1,6 @@
 <?php
 
-namespace ArgumentsResolver\Tests;
+namespace ArgumentsResolver\Tests\Fixtures;
 
 class InvokeVariousClass
 {
