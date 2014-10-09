@@ -82,14 +82,14 @@ class InDepthArgumentResolver extends ArgumentsResolver
     }
 
     /**
-     * Compares parameters by type and position.
+     * Compares reflection parameters by type and position.
      *
      * @param \ReflectionParameter $a
      * @param \ReflectionParameter $b
      *
      * @return int
      */
-    protected static function compareParameters(\ReflectionParameter $a, \ReflectionParameter $b)
+    private static function compareParameters(\ReflectionParameter $a, \ReflectionParameter $b)
     {
         if (0 !== $result = self::compareParameterClasses($a, $b)) {
             return $result;
@@ -107,14 +107,14 @@ class InDepthArgumentResolver extends ArgumentsResolver
     }
 
     /**
-     * Compares parameters by class.
+     * Compares reflection parameters by class hierarchy.
      *
      * @param \ReflectionParameter $a
      * @param \ReflectionParameter $b
      *
      * @return int
      */
-    protected static function compareParameterClasses(\ReflectionParameter $a, \ReflectionParameter $b)
+    private static function compareParameterClasses(\ReflectionParameter $a, \ReflectionParameter $b)
     {
         $a = $a->getClass();
         $b = $b->getClass();
