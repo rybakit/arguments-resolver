@@ -24,8 +24,7 @@
             "ArgumentsResolver\\Tests\\": "tests/"
         },
         "files": [
-            "tests/Fixtures/functions.php",
-            "tests/utils.php"
+            "tests/Fixtures/functions.php"
         ]
     },
     "extra": {
