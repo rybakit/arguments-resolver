@@ -8,25 +8,45 @@ use ArgumentsResolver\ReflectionFactory;
 class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider provideFunctions
+     * @dataProvider provideFunctionData
      */
-    public function testCreatingReflection($function)
+    public function testCreatingReflection($expectedName, $function)
     {
         $reflection = ReflectionFactory::create($function);
 
         $this->assertInstanceOf('ReflectionFunctionAbstract', $reflection);
+        $this->assertSame($expectedName, self::getFunctionName($reflection));
     }
 
-    public function provideFunctions()
+    public function provideFunctionData()
     {
+        $nsPrefix = __NAMESPACE__.'\\Fixtures\\';
+
         return [
-            ['function'             => __NAMESPACE__.'\Fixtures\function_empty'],
-            ['method'               => [__NAMESPACE__.'\Fixtures\TestClass', 'foo']],
-            ['method_magic'         => [__NAMESPACE__.'\Fixtures\TestClass', '__construct']],
-            ['static_method'        => [__NAMESPACE__.'\Fixtures\TestClass', 'bar']],
-            ['static_method_string' => __NAMESPACE__.'\Fixtures\TestClass::bar'],
-            ['invoker'              => new TestClass()],
-            ['closure'              => function () {}],
+            [$nsPrefix.'function_empty',            $nsPrefix.'function_empty'],
+            [$nsPrefix.'TestClass::foo',            [$nsPrefix.'TestClass', 'foo']],
+            [$nsPrefix.'TestClass::__construct',    [$nsPrefix.'TestClass', '__construct']],
+            [$nsPrefix.'TestClass::bar',            [$nsPrefix.'TestClass', 'bar']],
+            [$nsPrefix.'TestClass::bar',            $nsPrefix.'TestClass::bar'],
+            [$nsPrefix.'TestClass::__invoke',       new TestClass()],
+            [$nsPrefix.'TestClass::foo',            [new TestClass(), 'foo']],
+            [__NAMESPACE__.'\\{closure}',           function () {}],
         ];
+    }
+
+    /**
+     * @param \ReflectionFunctionAbstract $reflection
+     *
+     * @return string
+     */
+    protected static function getFunctionName(\ReflectionFunctionAbstract $reflection)
+    {
+        $name = $reflection->name;
+
+        if ($reflection instanceof \ReflectionMethod) {
+            $name = $reflection->getDeclaringClass()->name.'::'.$name;
+        }
+
+        return $name;
     }
 }
