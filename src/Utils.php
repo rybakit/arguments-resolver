@@ -13,6 +13,14 @@ class Utils
      */
     public static function createReflection($function)
     {
+        if (is_string($function)) {
+            $function = explode('::', $function, 2);
+
+            if (1 === count($function)) {
+                return new \ReflectionFunction($function[0]);
+            }
+        }
+
         if (is_array($function) && 2 === count($function)) {
             return new \ReflectionMethod($function[0], $function[1]);
         }
