@@ -56,7 +56,10 @@ abstract class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * @param array  $parameters
+     * @param string $testCase
+     *
+     * @return array
      */
     protected function resolveArguments(array $parameters, $testCase)
     {
