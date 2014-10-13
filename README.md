@@ -7,7 +7,6 @@ ArgumentsResolver
 ArgumentsResolver allows you to determine the arguments to pass to a function or method.
 
 
-
 ## Installation
 
 The recommended way to install ArgumentsResolver is through [Composer](http://getcomposer.org):
@@ -17,15 +16,13 @@ $ composer require rybakit/arguments-resolver:~1.0@dev
 ```
 
 
-
 ## Usage example
 
 ```php
-use ArgumentsResolver as ar;
+use ArgumentsResolver\InDepthArgumentsResolver;
 
-$informer = function ($username, DateTime $date, $greeting = 'Hello %s!') {
-    printf($greeting, $username);
-    printf("\nToday is the %s.", $date->format('jS \of F Y'));
+$callable = function ($username, DateTime $date, $greeting = 'Hello %s!') {
+    // ...
 };
 
 $parameters = [
@@ -36,62 +33,29 @@ $parameters = [
     'not an argument',
 ];
 
-call_user_func_array($informer, ar\resolve_arguments($informer, $parameters));
+$arguments = (new InDepthArgumentsResolver($callable))->resolve($parameters);
+print_r($arguments);
 ```
 
-The above example will output something similar to:
-
-```
-Welcome Stranger!
-Today is the 3rd of September 2013.
-```
-
-In a case you need to resolve arguments more than once for the same callable during
-the execution of the script, it's recommended to make use of the `CallableArgumentsResolver` class:
+The above example will output:
 
 ```php
-use ArgumentsResolver\CallableArgumentsResolver;
-
-...
-
-$resolver = new CallableArgumentsResolver($informer);
-
-call_user_func_array(
-    $resolver->getCallable(),
-    $resolver->resolveArguments($parameters1)
-);
-
-...
-
-call_user_func_array(
-    $resolver->getCallable(),
-    $resolver->resolveArguments($parameters2)
-);
+Array
+(
+    [0] => Stranger
+    [1] => DateTime Object (...)
+    [2] => Welcome %s!
+)
 ```
 
 
+## Resolvers
 
-## Adapters
+The library ships with two resolvers, the [InDepthArgumentsResolver](#indepthargumentsresolver) and [KeyArgumentsResolver](#keyargumentsresolver).
 
-Adapters are used to encapsulate the logic about how to resolve function/method arguments
-into the passed parameters. The library ships with two adapters, the `InDepthAdapter`
-and `KeyAdapter`. By default, the `InDepthAdapter` is used. To use a different adapter,
-simple pass it as the last argument to the `resolve_arguments` function
-or `CallableArgumentsResolver` constructor:
+#### InDepthArgumentsResolver
 
-```php
-use ArgumentsResolver\Adapter\KeyAdapter;
-
-...
-
-$args = f\resolve_arguments($callable, $parameters, new KeyAdapter());
-// or
-$resolver = new CallableArgumentsResolver($callable, new KeyAdapter());
-```
-
-#### InDepthAdapter
-
-In the `InDepthAdapter`, the decision about whether an argument matched the parameter value or not
+In the `InDepthArgumentsResolver`, the decision about whether an argument matched the parameter value or not
 is influenced by multiple factors, namely the argument's type, the class hierarchy (if it's an object),
 the argument name and the argument position.
 
@@ -102,7 +66,7 @@ To clarify, consider each circumstance in turn:
 ```php
 function foo(array $array, stdClass $object, callable $callable) {}
 
-$resolver->resolveArguments('foo', [
+(new InDepthArgumentsResolver('foo'))->resolve([
     ...
     function () {},    // $callable
     ...
@@ -118,7 +82,7 @@ $resolver->resolveArguments('foo', [
 ```php
 function foo(Exception $e, RuntimeException $re) {}
 
-$resolver->resolveArguments('foo', [
+(new InDepthArgumentsResolver('foo'))->resolve([
     ...
     new RuntimeException(),    // $re
     ...
@@ -132,7 +96,7 @@ $resolver->resolveArguments('foo', [
 ```php
 function foo($a, $b) {}
 
-$resolver->resolveArguments('foo', [
+(new InDepthArgumentsResolver('foo'))->resolve([
     ...
     'c' => 3,
     'b' => 2,    // $b
@@ -146,22 +110,22 @@ $resolver->resolveArguments('foo', [
 ```php
 function foo($a, $b) {}
 
-$resolver->resolveArguments('foo', [
+(new InDepthArgumentsResolver('foo'))->resolve([
     1,   // $a
     2,   // $b
     ...
 ]);
 ```
 
-#### KeyAdapter
+#### KeyArgumentsResolver
 
-The `KeyAdapter` is a very simple adapter which does the matching only by the argument name.
+The `KeyArgumentsResolver` is a very simple resolver which does the matching only by the argument name.
 Therefore this requires parameters to be an associative array:
 
 ```php
 function foo($a, array $b, $c = null) {}
 
-$resolver->resolveArguments('foo', [
+(new KeyArgumentsResolver('foo'))->resolve([
     ...
     'b' => [],       // $b
     'a' => 1,        // $a
@@ -169,12 +133,6 @@ $resolver->resolveArguments('foo', [
     ...
 ]);
 ```
-
-
-#### Custom adapter
-
-Creating your own adapter is as easy as implementing the [Adapter](src/Adapter/Adapter.php) interface.
-
 
 
 ## Tests
@@ -191,7 +149,6 @@ You can then run the tests:
 ```sh
 $ phpunit
 ```
-
 
 
 ## License
