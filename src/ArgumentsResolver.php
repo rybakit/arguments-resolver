@@ -14,7 +14,7 @@ abstract class ArgumentsResolver
      */
     public function __construct($function)
     {
-        $this->reflection = $function instanceof \ReflectionFunctionAbstract ? $function : Utils::createReflection($function);
+        $this->reflection = $function instanceof \ReflectionFunctionAbstract ? $function : ReflectionFactory::create($function);
     }
 
     /**

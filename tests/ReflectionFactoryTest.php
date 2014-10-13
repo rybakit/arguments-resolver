@@ -3,16 +3,16 @@
 namespace ArgumentsResolver\Tests;
 
 use ArgumentsResolver\Tests\Fixtures\TestClass;
-use ArgumentsResolver\Utils;
+use ArgumentsResolver\ReflectionFactory;
 
-class UtilsTest extends \PHPUnit_Framework_TestCase
+class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideFunctions
      */
     public function testCreatingReflection($function)
     {
-        $reflection = Utils::createReflection($function);
+        $reflection = ReflectionFactory::create($function);
 
         $this->assertInstanceOf('ReflectionFunctionAbstract', $reflection);
     }

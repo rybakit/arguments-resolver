@@ -2,7 +2,7 @@
 
 namespace ArgumentsResolver;
 
-class Utils
+class ReflectionFactory
 {
     /**
      * Creates a reflection for a given function.
@@ -11,7 +11,7 @@ class Utils
      *
      * @return \ReflectionFunction|\ReflectionMethod
      */
-    public static function createReflection($function)
+    public static function create($function)
     {
         if (is_string($function)) {
             $function = explode('::', $function, 2);
