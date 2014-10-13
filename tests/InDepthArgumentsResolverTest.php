@@ -2,7 +2,7 @@
 
 namespace ArgumentsResolver\Tests;
 
-use ArgumentsResolver\InDepthArgumentResolver;
+use ArgumentsResolver\InDepthArgumentsResolver;
 
 class InDepthArgumentsResolverTest extends ArgumentsResolverTest
 {
@@ -11,7 +11,7 @@ class InDepthArgumentsResolverTest extends ArgumentsResolverTest
      */
     protected function createResolver(\ReflectionFunctionAbstract $function)
     {
-        return new InDepthArgumentResolver($function);
+        return new InDepthArgumentsResolver($function);
     }
 
     public function testResolvingVariousOrdered()

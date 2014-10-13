@@ -2,7 +2,7 @@
 
 namespace ArgumentsResolver;
 
-class InDepthArgumentResolver extends ArgumentsResolver
+class InDepthArgumentsResolver extends ArgumentsResolver
 {
     /**
      * @var \ReflectionParameter[]
