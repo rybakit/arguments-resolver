@@ -63,7 +63,7 @@ abstract class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
         $reflection = $this->createFunctionReflection($testCase);
         $resolver = $this->createResolver($reflection);
 
-        return $resolver->resolveArguments($parameters);
+        return $resolver->resolve($parameters);
     }
 
     /**

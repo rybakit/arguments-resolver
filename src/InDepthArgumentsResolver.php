@@ -10,16 +10,6 @@ class InDepthArgumentsResolver extends ArgumentsResolver
     private $parameters;
 
     /**
-     * @param mixed $function
-     *
-     * @return static
-     */
-    public static function create($function)
-    {
-        return new static(Utils::createReflection($function));
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function getParameters()
@@ -35,7 +25,7 @@ class InDepthArgumentsResolver extends ArgumentsResolver
     /**
      * {@inheritdoc}
      */
-    protected function resolve(\ReflectionParameter $parameter, array $parameters)
+    protected function match(\ReflectionParameter $parameter, array $parameters)
     {
         $found = false;
 

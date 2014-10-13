@@ -9,9 +9,12 @@ abstract class ArgumentsResolver
      */
     protected $reflection;
 
-    public function __construct(\ReflectionFunctionAbstract $reflection)
+    /**
+     * @param mixed $function
+     */
+    public function __construct($function)
     {
-        $this->reflection = $reflection;
+        $this->reflection = $function instanceof \ReflectionFunctionAbstract ? $function : Utils::createReflection($function);
     }
 
     /**
@@ -23,7 +26,7 @@ abstract class ArgumentsResolver
      *
      * @throws UnresolvableArgumentException
      */
-    public function resolveArguments(array $parameters)
+    public function resolve(array $parameters)
     {
         if (!$number = $this->reflection->getNumberOfParameters()) {
             return [];
@@ -32,7 +35,7 @@ abstract class ArgumentsResolver
         $arguments = array_fill(0, $number, null);
 
         foreach ($this->getParameters() as $pos => $parameter) {
-            $result = $this->resolve($parameter, $parameters);
+            $result = $this->match($parameter, $parameters);
 
             if ($result) {
                 $arguments[$pos] = $result[1];
@@ -62,12 +65,12 @@ abstract class ArgumentsResolver
     }
 
     /**
-     * Returns the [key, value] pair if the parameter is resolved or false otherwise.
+     * Returns the [key, value] pair if the parameter is matched or false otherwise.
      *
      * @param \ReflectionParameter $parameter
      * @param array                $parameters
      *
      * @return array|bool
      */
-    abstract protected function resolve(\ReflectionParameter $parameter, array $parameters);
+    abstract protected function match(\ReflectionParameter $parameter, array $parameters);
 }
