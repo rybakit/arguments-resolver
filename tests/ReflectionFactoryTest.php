@@ -20,17 +20,19 @@ class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function provideFunctionData()
     {
-        $nsPrefix = __NAMESPACE__.'\\Fixtures\\';
+        $testClass = new TestClass();
+        $testClassName = get_class($testClass);
 
         return [
-            [$nsPrefix.'function_empty',            $nsPrefix.'function_empty'],
-            [$nsPrefix.'TestClass::foo',            [$nsPrefix.'TestClass', 'foo']],
-            [$nsPrefix.'TestClass::__construct',    [$nsPrefix.'TestClass', '__construct']],
-            [$nsPrefix.'TestClass::bar',            [$nsPrefix.'TestClass', 'bar']],
-            [$nsPrefix.'TestClass::bar',            $nsPrefix.'TestClass::bar'],
-            [$nsPrefix.'TestClass::__invoke',       new TestClass()],
-            [$nsPrefix.'TestClass::foo',            [new TestClass(), 'foo']],
-            [__NAMESPACE__.'\\{closure}',           function () {}],
+            [$testClassName.'::foo',                        [$testClassName, 'foo']],
+            [$testClassName.'::foo',                        [$testClass, 'foo']],
+            [$testClassName.'::bar',                        [$testClassName, 'bar']],
+            [$testClassName.'::bar',                        $testClassName.'::bar'],
+            [$testClassName.'::__construct',                [$testClassName, '__construct']],
+            [$testClassName.'::__construct',                [$testClass, '__construct']],
+            [$testClassName.'::__invoke',                   $testClass],
+            ['Closure::__invoke',                           function () {}],
+            [__NAMESPACE__.'\\Fixtures\\function_empty',    __NAMESPACE__.'\\Fixtures\\function_empty'],
         ];
     }
 

@@ -14,19 +14,15 @@ class ReflectionFactory
     public static function create($function)
     {
         if (is_string($function)) {
-            $function = explode('::', $function, 2);
-
-            if (1 === count($function)) {
-                return new \ReflectionFunction($function[0]);
-            }
+            return strpos($function, '::') ? new \ReflectionMethod($function) : new \ReflectionFunction($function);
         }
 
-        if (is_array($function) && 2 === count($function)) {
-            return new \ReflectionMethod($function[0], $function[1]);
+        if (is_array($function)) {
+            return (new \ReflectionClass('ReflectionMethod'))->newInstanceArgs($function);
         }
 
-        if (is_object($function) && !$function instanceof \Closure) {
-            return (new \ReflectionObject($function))->getMethod('__invoke');
+        if (method_exists($function, '__invoke')) {
+            return new \ReflectionMethod($function, '__invoke');
         }
 
         return new \ReflectionFunction($function);
