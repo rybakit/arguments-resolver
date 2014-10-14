@@ -1,28 +1,36 @@
 <?php
 
-namespace ArgumentsResolver\Adapter;
+namespace ArgumentsResolver;
 
-class InDepthAdapter implements Adapter
+class InDepthArgumentsResolver extends ArgumentsResolver
 {
+    /**
+     * @var \ReflectionParameter[]
+     */
+    private $parameters;
+
     /**
      * {@inheritdoc}
      */
-    public function prepare(array $parameters)
+    protected function getParameters()
     {
-        uasort($parameters, [__CLASS__, 'compareParameters']);
+        if (null === $this->parameters) {
+            $this->parameters = $this->reflection->getParameters();
+            uasort($this->parameters, [__CLASS__, 'compareParameters']);
+        }
 
-        return $parameters;
+        return $this->parameters;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function resolve(\ReflectionParameter $parameter, array $parameters)
+    protected function match(\ReflectionParameter $parameter, array $parameters)
     {
         $found = false;
 
         foreach ($parameters as $key => $value) {
-            if (!$this->matchType($parameter, $value)) {
+            if (!self::matchType($parameter, $value)) {
                 continue;
             }
 
@@ -46,7 +54,7 @@ class InDepthAdapter implements Adapter
      *
      * @return bool
      */
-    protected function matchType(\ReflectionParameter $parameter, $value)
+    protected static function matchType(\ReflectionParameter $parameter, $value)
     {
         if ($class = $parameter->getClass()) {
             return is_object($value) && $class->isInstance($value);
@@ -64,14 +72,14 @@ class InDepthAdapter implements Adapter
     }
 
     /**
-     * Compares parameters by type and position.
+     * Compares reflection parameters by type and position.
      *
      * @param \ReflectionParameter $a
      * @param \ReflectionParameter $b
      *
      * @return int
      */
-    protected static function compareParameters(\ReflectionParameter $a, \ReflectionParameter $b)
+    private static function compareParameters(\ReflectionParameter $a, \ReflectionParameter $b)
     {
         if (0 !== $result = self::compareParameterClasses($a, $b)) {
             return $result;
@@ -89,14 +97,14 @@ class InDepthAdapter implements Adapter
     }
 
     /**
-     * Compares parameters by class.
+     * Compares reflection parameters by class hierarchy.
      *
      * @param \ReflectionParameter $a
      * @param \ReflectionParameter $b
      *
      * @return int
      */
-    protected static function compareParameterClasses(\ReflectionParameter $a, \ReflectionParameter $b)
+    private static function compareParameterClasses(\ReflectionParameter $a, \ReflectionParameter $b)
     {
         $a = $a->getClass();
         $b = $b->getClass();

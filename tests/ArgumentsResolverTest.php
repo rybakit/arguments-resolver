@@ -2,18 +2,77 @@
 
 namespace ArgumentsResolver\Tests;
 
-use ArgumentsResolver\Adapter\Adapter;
-use ArgumentsResolver\ArgumentsResolver;
-
-class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
+abstract class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 {
-    use ResolvingTrait;
-
-    protected function resolveArguments(array $arguments, $type, $mode, Adapter $adapter)
+    public function testResolvingVariousByName()
     {
-        $reflection = create_callable_reflection($type, $mode);
-        $callee = new ArgumentsResolver($reflection, $adapter);
+        $bar = new \stdClass();
+        $baz = ['baz'];
 
-        return $callee->resolveArguments($arguments);
+        $parameters = ['qux' => 'qux', 'baz' => $baz, 'bar' => $bar, 'foo' => 'foo'];
+        $arguments = ['foo', $bar, $baz, 'qux'];
+
+        $this->assertArguments($arguments, $parameters, 'various');
     }
+
+    public function testResolvingOptional()
+    {
+        $parameters = ['mixed1' => 'foo', 'mixed2' => 'bar'];
+        $arguments = ['foo', 'bar', 1, 2];
+
+        $this->assertArguments($arguments, $parameters, 'optional');
+    }
+
+    public function testResolvingEmpty()
+    {
+        $parameters = ['foo'];
+        $arguments = [];
+
+        $this->assertArguments($arguments, $parameters, 'empty');
+    }
+
+    /**
+     * @expectedException \ArgumentsResolver\UnresolvableArgumentException
+     * @expectedExceptionMessage Unable to resolve argument
+     */
+    public function testResolvingThrowsExceptionOnEmptyParameters()
+    {
+        $this->resolveArguments([], 'various');
+    }
+
+    public function assertArguments(array $expected, array $actual, $testCase)
+    {
+        $this->assertSame($expected, $this->resolveArguments($actual, $testCase));
+    }
+
+    /**
+     * @param string $testCase
+     *
+     * @return \ReflectionFunction
+     */
+    protected function createFunctionReflection($testCase)
+    {
+        return new \ReflectionFunction(__NAMESPACE__.'\Fixtures\function_'.$testCase);
+    }
+
+    /**
+     * @param array  $parameters
+     * @param string $testCase
+     *
+     * @return array
+     */
+    protected function resolveArguments(array $parameters, $testCase)
+    {
+        $reflection = $this->createFunctionReflection($testCase);
+        $resolver = $this->createResolver($reflection);
+
+        return $resolver->resolve($parameters);
+    }
+
+    /**
+     * @param \ReflectionFunctionAbstract $function
+     *
+     * @return \ArgumentsResolver\ArgumentsResolver
+     */
+    abstract protected function createResolver(\ReflectionFunctionAbstract $function);
 }
