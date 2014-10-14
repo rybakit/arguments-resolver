@@ -11,8 +11,8 @@ class UnresolvableArgumentExceptionTest extends \PHPUnit_Framework_TestCase
         $functionName = __NAMESPACE__.'\Fixtures\function_various';
         $function = new \ReflectionFunction($functionName);
 
-        $parameter = reset($function->getParameters());
-        $exception = new UnresolvableArgumentException($parameter);
+        $parameters = $function->getParameters();
+        $exception = new UnresolvableArgumentException($parameters[0]);
 
         $this->assertRegExp(
             sprintf('/^Unable to resolve argument \$\w+ \(#0\) of %s\(\)\.$/', preg_quote($functionName, '/')),
