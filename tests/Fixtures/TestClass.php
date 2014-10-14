@@ -12,7 +12,7 @@ class TestClass
     {
     }
 
-    public function foo()
+    public function foo($arg = null)
     {
     }
 
