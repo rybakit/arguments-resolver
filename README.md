@@ -1,5 +1,5 @@
 ArgumentsResolver
-=========================
+=================
 [![Build Status](https://secure.travis-ci.org/rybakit/arguments-resolver.svg?branch=master)](http://travis-ci.org/rybakit/arguments-resolver)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/?branch=master)
@@ -21,19 +21,19 @@ $ composer require rybakit/arguments-resolver:~1.0@dev
 ```php
 use ArgumentsResolver\InDepthArgumentsResolver;
 
-$callable = function ($username, DateTime $date, $greeting = 'Hello %s!') {
+$greet = function ($username, DateTime $date, $greeting = 'Hello %s!') {
     // ...
 };
 
 $parameters = [
-    new DateTime(),
     'Welcome %s!',
-    ['not an argument'],
+    new DateTime(),
+    ['foo'],
     'username' => 'Stranger',
-    'not an argument',
+    'bar',
 ];
 
-$arguments = (new InDepthArgumentsResolver($callable))->resolve($parameters);
+$arguments = (new InDepthArgumentsResolver($greet))->resolve($parameters);
 print_r($arguments);
 ```
 
