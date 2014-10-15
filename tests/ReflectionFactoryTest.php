@@ -43,12 +43,17 @@ class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected static function getFunctionName(\ReflectionFunctionAbstract $reflection)
     {
-        $name = $reflection->name;
-
-        if ($reflection instanceof \ReflectionMethod) {
-            $name = $reflection->getDeclaringClass()->name.'::'.$name;
+        if (!$reflection instanceof \ReflectionMethod) {
+            return $reflection->name;
         }
 
-        return $name;
+        $class = $reflection->getDeclaringClass()->name;
+
+        // see https://github.com/facebook/hhvm/issues/3874
+        if (0 === strpos($class, 'Closure')) {
+            $class = 'Closure';
+        }
+
+        return $class.'::'.$reflection->name;
     }
 }
