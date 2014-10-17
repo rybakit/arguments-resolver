@@ -2,7 +2,7 @@
 
 namespace ArgumentsResolver;
 
-class ReflectionFactory
+abstract class ReflectionFactory
 {
     /**
      * Creates a reflection for a given function.
