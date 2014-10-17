@@ -52,7 +52,7 @@ Array
 ## Resolvers
 
 The library ships with two resolvers, the [InDepthArgumentsResolver](#indepthargumentsresolver) and [KeyArgumentsResolver](#keyargumentsresolver).
-They both expect a function to be supplied as a single constructor argument. The function can be any [callable](http://php.net/manual/en/language.types.callable.php), [a string representing a class method](http://php.net/manual/en/reflectionmethod.construct.php) or an instance of [ReflectionFunctionAbstract](http://php.net/manual/en/class.reflectionfunctionabstract.php):
+They both expect a function to be supplied as a single constructor argument. The function can be any [callable](http://php.net/manual/en/language.types.callable.php), [a string representing a class method](http://php.net/manual/en/reflectionmethod.construct.php#refsect1-reflectionmethod.construct-parameters) or an instance of [ReflectionFunctionAbstract](http://php.net/manual/en/class.reflectionfunctionabstract.php):
 
 ```php
 new InDepthArgumentsResolver(['MyClass', 'myMethod']);
