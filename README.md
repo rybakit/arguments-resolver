@@ -52,6 +52,31 @@ Array
 ## Resolvers
 
 The library ships with two resolvers, the [InDepthArgumentsResolver](#indepthargumentsresolver) and [KeyArgumentsResolver](#keyargumentsresolver).
+They both expect a function to be supplied as a single constructor argument. The function can be any [callable](http://php.net/manual/en/language.types.callable.php), [a string representing a class method](http://php.net/manual/en/reflectionmethod.construct.php) or an instance of [ReflectionFunctionAbstract](http://php.net/manual/en/class.reflectionfunctionabstract.php):
+
+```php
+new InDepthArgumentsResolver(['MyClass', 'myMethod']);
+new InDepthArgumentsResolver([new MyClass(), 'myMethod']);
+new InDepthArgumentsResolver(['MyClass', 'myStaticMethod']);
+new InDepthArgumentsResolver('MyClass::myStaticMethod');
+new InDepthArgumentsResolver('MyClass::__construct');
+new InDepthArgumentsResolver(['MyClass', '__construct']);
+new InDepthArgumentsResolver(new MyClass());
+new InDepthArgumentsResolver(function () {});
+new InDepthArgumentsResolver('MyNamespace\my_function');
+new InDepthArgumentsResolver(new ReflectionMethod('MyClass', 'myMethod'));
+new InDepthArgumentsResolver(new ReflectionFunction('MyNamespace\my_function'));
+```
+
+There is also an utility class which helps in creating a reflection instance:
+
+```php
+use ArgumentsResolver\ReflectionFactory;
+
+$reflection = ReflectionFactory::create('MyClass::__construct');
+$resolver = new InDepthArgumentsResolver($reflection);
+```
+
 
 #### InDepthArgumentsResolver
 
