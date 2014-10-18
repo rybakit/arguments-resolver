@@ -2,15 +2,15 @@
 
 namespace ArgumentsResolver\Tests;
 
-use ArgumentsResolver\KeyArgumentsResolver;
+use ArgumentsResolver\NamedArgumentsResolver;
 
-class KeyArgumentsResolverTest extends ArgumentsResolverTest
+class NamedArgumentsResolverTest extends ArgumentsResolverTest
 {
     /**
      * {@inheritdoc}
      */
     protected function createResolver(\ReflectionFunctionAbstract $function)
     {
-        return new KeyArgumentsResolver($function);
+        return new NamedArgumentsResolver($function);
     }
 }

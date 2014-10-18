@@ -51,7 +51,7 @@ Array
 
 ## Resolvers
 
-The library ships with two resolvers, the [InDepthArgumentsResolver](#indepthargumentsresolver) and [KeyArgumentsResolver](#keyargumentsresolver).
+The library ships with two resolvers, the [InDepthArgumentsResolver](#indepthargumentsresolver) and [NamedArgumentsResolver](#namedargumentsresolver).
 They both expect a function to be supplied as a single constructor argument. The function can be any [callable](http://php.net/manual/en/language.types.callable.php), [a string representing a class method](http://php.net/manual/en/reflectionmethod.construct.php#refsect1-reflectionmethod.construct-parameters) or an instance of [ReflectionFunctionAbstract](http://php.net/manual/en/class.reflectionfunctionabstract.php):
 
 ```php
@@ -142,15 +142,15 @@ function foo($a, $b) {}
 ]);
 ```
 
-#### KeyArgumentsResolver
+#### NamedArgumentsResolver
 
-The `KeyArgumentsResolver` is a very simple resolver which does the matching only by the argument name.
+The `NamedArgumentsResolver` is a very simple resolver which does the matching only by the argument name.
 Therefore this requires parameters to be an associative array:
 
 ```php
 function foo($a, array $b, $c = null) {}
 
-(new KeyArgumentsResolver('foo'))->resolve([
+(new NamedArgumentsResolver('foo'))->resolve([
     ...
     'b' => [],       // $b
     'a' => 1,        // $a

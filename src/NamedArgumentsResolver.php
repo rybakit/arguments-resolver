@@ -2,7 +2,7 @@
 
 namespace ArgumentsResolver;
 
-class KeyArgumentsResolver extends ArgumentsResolver
+class NamedArgumentsResolver extends ArgumentsResolver
 {
     /**
      * {@inheritdoc}
