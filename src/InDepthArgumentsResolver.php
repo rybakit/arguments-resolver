@@ -27,7 +27,7 @@ class InDepthArgumentsResolver extends ArgumentsResolver
      */
     protected function match(\ReflectionParameter $parameter, array $parameters)
     {
-        $found = false;
+        $found = null;
 
         foreach ($parameters as $key => $value) {
             if (!self::matchType($parameter, $value)) {
@@ -38,7 +38,7 @@ class InDepthArgumentsResolver extends ArgumentsResolver
                 return [$key, $value];
             }
 
-            if (false === $found) {
+            if (!$found) {
                 $found = [$key, $value];
             }
         }

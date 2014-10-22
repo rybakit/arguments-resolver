@@ -12,7 +12,5 @@ class NamedArgumentsResolver extends ArgumentsResolver
         if (array_key_exists($parameter->name, $parameters)) {
             return [$parameter->name, $parameters[$parameter->name]];
         }
-
-        return false;
     }
 }
