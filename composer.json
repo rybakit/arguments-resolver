@@ -1,7 +1,7 @@
 {
     "name": "rybakit/arguments-resolver",
     "description": "ArgumentsResolver allows you to determine the arguments to pass to a function or method.",
-    "keywords": ["arguments parameters function method callable invoke resolver"],
+    "keywords": ["arguments", "parameters", "function", "method", "callable", "invoke", "resolver"],
     "homepage": "https://github.com/rybakit/arguments-resolver",
     "type": "library",
     "license": "MIT",
