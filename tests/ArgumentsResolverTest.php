@@ -4,31 +4,31 @@ namespace ArgumentsResolver\Tests;
 
 abstract class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
 {
-    public function testResolvingVariousByName()
+    public function testResolvingByName()
     {
-        $bar = new \stdClass();
-        $baz = ['baz'];
+        $function = function ($foo, $bar, $baz) {};
+        $arguments = ['foo', 'bar', 'baz'];
+        $parameters = ['baz' => 'baz', 'bar' => 'bar', 'foo' => 'foo'];
 
-        $parameters = ['qux' => 'qux', 'baz' => $baz, 'bar' => $bar, 'foo' => 'foo'];
-        $arguments = ['foo', $bar, $baz, 'qux'];
-
-        $this->assertArguments($arguments, $parameters, 'various');
+        $this->assertArguments($function, $arguments, $parameters);
     }
 
     public function testResolvingOptional()
     {
-        $parameters = ['mixed1' => 'foo', 'mixed2' => 'bar'];
-        $arguments = ['foo', 'bar', 1, 2];
+        $function = function ($foo = 'foo', $bar = 'bar') {};
+        $arguments = ['foo', 'bar'];
+        $parameters = [];
 
-        $this->assertArguments($arguments, $parameters, 'optional');
+        $this->assertArguments($function, $arguments, $parameters);
     }
 
     public function testResolvingEmpty()
     {
-        $parameters = ['foo'];
+        $function = function () {};
         $arguments = [];
+        $parameters = ['foo' => 'foo'];
 
-        $this->assertArguments($arguments, $parameters, 'empty');
+        $this->assertArguments($function, $arguments, $parameters);
     }
 
     /**
@@ -37,33 +37,23 @@ abstract class ArgumentsResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolvingThrowsExceptionOnEmptyParameters()
     {
-        $this->resolveArguments([], 'various');
+        $this->resolveArguments(function ($foo) {}, []);
     }
 
-    public function assertArguments(array $expected, array $actual, $testCase)
+    public function assertArguments(\Closure $function, array $expected, array $actual)
     {
-        $this->assertSame($expected, $this->resolveArguments($actual, $testCase));
+        $this->assertSame($expected, $this->resolveArguments($function, $actual));
     }
 
     /**
-     * @param string $testCase
-     *
-     * @return \ReflectionFunction
-     */
-    protected function createFunctionReflection($testCase)
-    {
-        return new \ReflectionFunction(__NAMESPACE__.'\Fixtures\function_'.$testCase);
-    }
-
-    /**
-     * @param array  $parameters
-     * @param string $testCase
+     * @param \Closure $function
+     * @param array    $parameters
      *
      * @return array
      */
-    protected function resolveArguments(array $parameters, $testCase)
+    protected function resolveArguments(\Closure $function, array $parameters)
     {
-        $reflection = $this->createFunctionReflection($testCase);
+        $reflection = new \ReflectionFunction($function);
         $resolver = $this->createResolver($reflection);
 
         return $resolver->resolve($parameters);

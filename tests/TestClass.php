@@ -1,6 +1,6 @@
 <?php
 
-namespace ArgumentsResolver\Tests\Fixtures;
+namespace ArgumentsResolver\Tests;
 
 class TestClass
 {

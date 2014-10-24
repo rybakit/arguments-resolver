@@ -22,8 +22,10 @@ class UnresolvableArgumentExceptionTest extends \PHPUnit_Framework_TestCase
 
     public function provideReflectionData()
     {
-        $functionName = __NAMESPACE__.'\Fixtures\function_various';
-        $methodName = __NAMESPACE__.'\Fixtures\TestClass::foo';
+        function foo ($foo) {};
+
+        $functionName = __NAMESPACE__.'\foo';
+        $methodName = __NAMESPACE__.'\TestClass::foo';
 
         return [
             [$functionName, new \ReflectionFunction($functionName)],

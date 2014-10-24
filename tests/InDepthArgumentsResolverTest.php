@@ -14,85 +14,62 @@ class InDepthArgumentsResolverTest extends ArgumentsResolverTest
         return new InDepthArgumentsResolver($function);
     }
 
-    public function testResolvingVariousOrdered()
+    public function testResolvingByType()
     {
-        $parameters = ['foo', new \stdClass(), ['baz'], 'qux'];
-        $arguments = $parameters;
-
-        $this->assertArguments($arguments, $parameters, 'various');
-    }
-
-    public function testResolvingVariousUnordered()
-    {
+        $foo = function () {};
         $bar = new \stdClass();
         $baz = ['baz'];
 
-        $parameters = ['foo', 'qux', $baz, $bar];
-        $arguments = ['foo', $bar, $baz, 'qux'];
+        $function = function (callable $foo, \stdClass $bar, array $baz, $qux = null) {};
+        $arguments = [$foo, $bar, $baz, 'qux'];
+        $parameters = ['qux', $baz, $foo, $bar];
 
-        $this->assertArguments($arguments, $parameters, 'various');
+        $this->assertArguments($function, $arguments, $parameters);
     }
 
-    public function testResolvingVariousOptional()
+    public function testResolvingOptionalByType()
     {
-        $parameters = ['foo', new \stdClass()];
-        $arguments = array_merge($parameters, [[], null]);
+        $function = function (callable $foo = null, array $bar = []) {};
+        $arguments = [null, []];
+        $parameters = [];
 
-        $this->assertArguments($arguments, $parameters, 'various');
+        $this->assertArguments($function, $arguments, $parameters);
     }
 
-    public function testResolvingVariousByNameAndType()
+    public function testResolvingSameTypeByName()
     {
         $foo = (object) ['name' => 'foo'];
         $bar = (object) ['name' => 'bar'];
 
-        $parameters = ['bar' => $bar, $foo];
-        $arguments = [$foo, $bar, [], null];
+        $function = function (\stdClass $foo, \stdClass $bar) {};
+        $arguments = [$foo, $bar];
+        $parameters = ['bar' => $bar, 'foo' => $foo];
 
-        $this->assertArguments($arguments, $parameters, 'various');
+        $this->assertArguments($function, $arguments, $parameters);
     }
 
-    public function testResolvingObjectSameType()
+    public function testResolvingByObjectHierarchy()
     {
-        $bar = (object) ['name' => 'bar'];
-        $qux = (object) ['name' => 'qux'];
-
-        $parameters = [$bar, 'foo', $qux, 'baz'];
-        $arguments = ['foo', $bar, 'baz', $qux];
-
-        $this->assertArguments($arguments, $parameters, 'object_same');
-    }
-
-    public function testResolvingObjectHierarchyType()
-    {
-        $bar = new \Exception();
-        $qux = new \RuntimeException();
-
-        $parameters = [$qux, 'foo', $bar, 'baz'];
-        $arguments = ['foo', $bar, 'baz', $qux];
-
-        $this->assertArguments($arguments, $parameters, 'object_hierarchy');
-    }
-
-    public function testResolvingObjectHierarchyTypeReverse()
-    {
+        $foo = new \Exception();
         $bar = new \RuntimeException();
-        $qux = new \Exception();
 
-        $parameters = [$qux, 'foo', $bar, 'baz'];
-        $arguments = ['foo', $bar, 'baz', $qux];
+        $function = function (\Exception $foo, \RuntimeException $bar) {};
+        $arguments = [$foo, $bar];
+        $parameters = [$bar, $foo];
 
-        $this->assertArguments($arguments, $parameters, 'object_hierarchy_reverse');
+        $this->assertArguments($function, $arguments, $parameters);
     }
 
-    public function testResolvingCallable()
+    public function testResolvingByObjectHierarchyReversed()
     {
-        $bar = function () {};
+        $foo = new \RuntimeException();
+        $bar = new \Exception();
 
-        $parameters = [$bar, 'foo', 'baz'];
-        $arguments = ['foo', $bar, 'baz'];
+        $function = function (\RuntimeException $foo, \Exception $bar) {};
+        $arguments = [$foo, $bar];
+        $parameters = [$bar, $foo];
 
-        $this->assertArguments($arguments, $parameters, 'callable');
+        $this->assertArguments($function, $arguments, $parameters);
     }
 
     /**
@@ -100,17 +77,17 @@ class InDepthArgumentsResolverTest extends ArgumentsResolverTest
      * @expectedException \ArgumentsResolver\UnresolvableArgumentException
      * @expectedExceptionMessage Unable to resolve argument
      */
-    public function testResolvingThrowsExceptionOnInvalidType($testCase, $parameters)
+    public function testResolvingThrowsExceptionOnInvalidType($function, $parameters)
     {
-        $this->resolveArguments($parameters, $testCase);
+        $this->resolveArguments($function, $parameters);
     }
 
     public function provideInvalidParameterTypes()
     {
         return [
-            ['array', [null, null, null]],
-            ['callable', [null, null, null]],
-            ['object_same', [null, null, null, null]],
+            [function (array $foo) {}, [42]],
+            [function (callable $foo) {}, [42]],
+            [function (\stdClass $foo) {}, [42]],
         ];
     }
 }

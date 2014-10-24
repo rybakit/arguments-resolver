@@ -2,7 +2,6 @@
 
 namespace ArgumentsResolver\Tests;
 
-use ArgumentsResolver\Tests\Fixtures\TestClass;
 use ArgumentsResolver\ReflectionFactory;
 
 class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
@@ -24,15 +23,15 @@ class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
         $testClassName = get_class($testClass);
 
         return [
-            [$testClassName.'::foo',                        [$testClassName, 'foo']],
-            [$testClassName.'::foo',                        [$testClass, 'foo']],
-            [$testClassName.'::bar',                        [$testClassName, 'bar']],
-            [$testClassName.'::bar',                        $testClassName.'::bar'],
-            [$testClassName.'::__construct',                [$testClassName, '__construct']],
-            [$testClassName.'::__construct',                [$testClass, '__construct']],
-            [$testClassName.'::__invoke',                   $testClass],
-            ['Closure::__invoke',                           function () {}],
-            [__NAMESPACE__.'\\Fixtures\\function_empty',    __NAMESPACE__.'\\Fixtures\\function_empty'],
+            [$testClassName.'::foo',            [$testClassName, 'foo']],
+            [$testClassName.'::foo',            [$testClass, 'foo']],
+            [$testClassName.'::bar',            [$testClassName, 'bar']],
+            [$testClassName.'::bar',            $testClassName.'::bar'],
+            [$testClassName.'::__construct',    [$testClassName, '__construct']],
+            [$testClassName.'::__construct',    [$testClass, '__construct']],
+            [$testClassName.'::__invoke',       $testClass],
+            ['Closure::__invoke',               function () {}],
+            ['log',                             'log'],
         ];
     }
 

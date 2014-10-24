@@ -22,10 +22,7 @@
     "autoload-dev" : {
         "psr-4": {
             "ArgumentsResolver\\Tests\\": "tests/"
-        },
-        "files": [
-            "tests/Fixtures/functions.php"
-        ]
+        }
     },
     "extra": {
         "branch-alias": {
