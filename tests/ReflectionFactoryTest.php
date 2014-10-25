@@ -31,7 +31,7 @@ class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
             [$testClassName.'::__construct',    [$testClass, '__construct']],
             [$testClassName.'::__invoke',       $testClass],
             ['Closure::__invoke',               function () {}],
-            ['log',                             'log'],
+            ['abs',                             'abs'],
         ];
     }
 
