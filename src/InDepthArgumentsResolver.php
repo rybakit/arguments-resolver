@@ -7,19 +7,19 @@ class InDepthArgumentsResolver extends ArgumentsResolver
     /**
      * @var \ReflectionParameter[]
      */
-    private $parameters;
+    private $sortedParameters;
 
     /**
      * {@inheritdoc}
      */
     protected function getParameters()
     {
-        if (null === $this->parameters) {
-            $this->parameters = $this->reflection->getParameters();
-            uasort($this->parameters, [__CLASS__, 'compareParameters']);
+        if (null === $this->sortedParameters) {
+            $this->sortedParameters = $this->reflection->getParameters();
+            uasort($this->sortedParameters, [__CLASS__, 'compareParameters']);
         }
 
-        return $this->parameters;
+        return $this->sortedParameters;
     }
 
     /**
