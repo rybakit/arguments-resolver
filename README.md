@@ -12,7 +12,7 @@ ArgumentsResolver allows you to determine the arguments to pass to a function or
 The recommended way to install ArgumentsResolver is through [Composer](http://getcomposer.org):
 
 ```sh
-$ composer require rybakit/arguments-resolver:~1.0@dev
+$ composer require rybakit/arguments-resolver
 ```
 
 
