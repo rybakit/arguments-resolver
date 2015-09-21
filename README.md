@@ -27,8 +27,8 @@ $greet = function ($username, DateTime $date, $greeting = 'Hello %s!') {
 
 $parameters = [
     'Welcome %s!',
-    new DateTime(),
     ['foo'],
+    new DateTime(),
     'username' => 'Stranger',
     'bar',
 ];
