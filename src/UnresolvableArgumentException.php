@@ -21,7 +21,7 @@ class UnresolvableArgumentException extends \InvalidArgumentException
             'Unable to resolve argument $%s (#%d) of %s.',
             $parameter->name,
             $parameter->getPosition(),
-            static::getFunctionName($parameter->getDeclaringFunction())
+            self::getFunctionName($parameter->getDeclaringFunction())
         ));
     }
 
