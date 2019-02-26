@@ -1,23 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the rybakit/arguments-resolver package.
+ *
+ * (c) Eugene Leonovich <gen.work@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ArgumentsResolver\Tests;
 
 use ArgumentsResolver\ReflectionFactory;
+use PHPUnit\Framework\TestCase;
 
-class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
+final class ReflectionFactoryTest extends TestCase
 {
     /**
      * @dataProvider provideFunctionData
      */
-    public function testCreatingReflection($expectedName, $function)
+    public function testCreatingReflection(string $expectedName, $function)
     {
         $reflection = ReflectionFactory::create($function);
 
-        $this->assertInstanceOf('ReflectionFunctionAbstract', $reflection);
-        $this->assertSame($expectedName, self::getFunctionName($reflection));
+        self::assertSame($expectedName, self::getFunctionName($reflection));
     }
 
-    public function provideFunctionData()
+    public function provideFunctionData() : iterable
     {
         $testClass = new TestClass();
         $testClassName = get_class($testClass);
@@ -35,23 +46,13 @@ class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @param \ReflectionFunctionAbstract $reflection
-     *
-     * @return string
-     */
-    protected static function getFunctionName(\ReflectionFunctionAbstract $reflection)
+    private static function getFunctionName(\ReflectionFunctionAbstract $reflection) : string
     {
         if (!$reflection instanceof \ReflectionMethod) {
             return $reflection->name;
         }
 
         $class = $reflection->getDeclaringClass()->name;
-
-        // see https://github.com/facebook/hhvm/issues/3874
-        if (0 === strpos($class, 'Closure')) {
-            $class = 'Closure';
-        }
 
         return $class.'::'.$reflection->name;
     }

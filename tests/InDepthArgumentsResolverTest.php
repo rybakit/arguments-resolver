@@ -1,88 +1,114 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the rybakit/arguments-resolver package.
+ *
+ * (c) Eugene Leonovich <gen.work@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ArgumentsResolver\Tests;
 
+use ArgumentsResolver\ArgumentsResolver;
 use ArgumentsResolver\InDepthArgumentsResolver;
+use ArgumentsResolver\UnresolvableArgumentException;
 
-class InDepthArgumentsResolverTest extends ArgumentsResolverTest
+final class InDepthArgumentsResolverTest extends ArgumentsResolverTest
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function createResolver(\ReflectionFunctionAbstract $function)
+    protected function createResolver(\ReflectionFunctionAbstract $function) : ArgumentsResolver
     {
         return new InDepthArgumentsResolver($function);
     }
 
-    public function testResolvingByType()
+    public function testResolvingByType() : void
     {
-        $foo = function () {};
-        $bar = new \stdClass();
-        $baz = ['baz'];
+        $callable = function () {};
+        $stdClass = new \stdClass();
+        $array = ['baz'];
+        $iterable = new \ArrayIterator([1, 2]);
+        $int = 42;
+        $float = M_PI;
+        $string = 'foobar';
+        $mixed = null;
 
-        $function = function (callable $foo, \stdClass $bar, array $baz, $qux = null) {};
-        $arguments = [$foo, $bar, $baz, 'qux'];
-        $parameters = ['qux', $baz, $foo, $bar];
+        $function = function (
+            callable $callable,
+            \stdClass $stdClass,
+            array $array,
+            iterable $iterable,
+            int $int,
+            float $float,
+            string $string,
+            $mixed = null
+        ) {};
 
-        $this->assertArguments($function, $arguments, $parameters);
+        $result = [$callable, $stdClass, $array, $iterable, $int, $float, $string, $mixed];
+        $input = [$mixed, $array, $float, $stdClass, $string, $callable, $int, $iterable];
+
+        $this->assertArguments($function, $result, $input);
     }
 
-    public function testResolvingOptionalByType()
+    public function testResolvingOptionalByType() : void
     {
-        $function = function (callable $foo = null, array $bar = []) {};
-        $arguments = [null, []];
-        $parameters = [];
+        $function = function (callable $foo = null, array $bar = [], bool $baz = false) {};
+        $result = [null, [], false];
+        $input = [];
 
-        $this->assertArguments($function, $arguments, $parameters);
+        $this->assertArguments($function, $result, $input);
     }
 
-    public function testResolvingSameTypeByName()
+    public function testResolvingSameTypeByName() : void
     {
         $foo = (object) ['name' => 'foo'];
         $bar = (object) ['name' => 'bar'];
 
         $function = function (\stdClass $foo, \stdClass $bar) {};
-        $arguments = [$foo, $bar];
-        $parameters = ['bar' => $bar, 'foo' => $foo];
+        $result = [$foo, $bar];
+        $input = ['bar' => $bar, 'foo' => $foo];
 
-        $this->assertArguments($function, $arguments, $parameters);
+        $this->assertArguments($function, $result, $input);
     }
 
-    public function testResolvingByObjectHierarchy()
+    public function testResolvingByObjectHierarchy() : void
     {
         $foo = new \Exception();
         $bar = new \RuntimeException();
 
         $function = function (\Exception $foo, \RuntimeException $bar) {};
-        $arguments = [$foo, $bar];
-        $parameters = [$bar, $foo];
+        $result = [$foo, $bar];
+        $input = [$bar, $foo];
 
-        $this->assertArguments($function, $arguments, $parameters);
+        $this->assertArguments($function, $result, $input);
     }
 
-    public function testResolvingByObjectHierarchyReversed()
+    public function testResolvingByObjectHierarchyReversed() : void
     {
         $foo = new \RuntimeException();
         $bar = new \Exception();
 
         $function = function (\RuntimeException $foo, \Exception $bar) {};
-        $arguments = [$foo, $bar];
-        $parameters = [$bar, $foo];
+        $result = [$foo, $bar];
+        $input = [$bar, $foo];
 
-        $this->assertArguments($function, $arguments, $parameters);
+        $this->assertArguments($function, $result, $input);
     }
 
     /**
      * @dataProvider provideInvalidParameterTypes
-     * @expectedException \ArgumentsResolver\UnresolvableArgumentException
-     * @expectedExceptionMessage Unable to resolve argument
      */
-    public function testResolvingThrowsExceptionOnInvalidType($function, $parameters)
+    public function testResolvingThrowsExceptionOnInvalidType(\Closure $function, array $input) : void
     {
-        $this->resolveArguments($function, $parameters);
+        $this->expectException(UnresolvableArgumentException::class);
+        $this->expectExceptionMessage('Unable to resolve argument');
+
+        $this->resolveArguments($function, $input);
     }
 
-    public function provideInvalidParameterTypes()
+    public function provideInvalidParameterTypes() : iterable
     {
         return [
             [function (array $foo) {}, [42]],
