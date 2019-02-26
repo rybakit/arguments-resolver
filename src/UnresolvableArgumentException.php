@@ -1,21 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the rybakit/arguments-resolver package.
+ *
+ * (c) Eugene Leonovich <gen.work@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ArgumentsResolver;
 
 class UnresolvableArgumentException extends \InvalidArgumentException
 {
-    public function __construct(\ReflectionParameter $parameter, $message = null, $code = null, \Exception $previous = null)
+    public static function fromParameter(\ReflectionParameter $parameter) : self
     {
-        if (null === $message) {
-            $message = sprintf(
-                'Unable to resolve argument $%s (#%d) of %s.',
-                $parameter->name,
-                $parameter->getPosition(),
-                static::getFunctionName($parameter->getDeclaringFunction())
-            );
-        }
-
-        parent::__construct($message, $code, $previous);
+        return new self(\sprintf(
+            'Unable to resolve argument $%s (#%d) of %s.',
+            $parameter->name,
+            $parameter->getPosition(),
+            static::getFunctionName($parameter->getDeclaringFunction())
+        ));
     }
 
     /**
@@ -23,7 +30,7 @@ class UnresolvableArgumentException extends \InvalidArgumentException
      *
      * @return string
      */
-    protected static function getFunctionName(\ReflectionFunctionAbstract $reflection)
+    private static function getFunctionName(\ReflectionFunctionAbstract $reflection) : string
     {
         $name = $reflection->name.'()';
 

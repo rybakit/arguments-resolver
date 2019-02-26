@@ -11,8 +11,8 @@ ArgumentsResolver allows you to determine the arguments to pass to a function or
 
 The recommended way to install ArgumentsResolver is through [Composer](http://getcomposer.org):
 
-```sh
-$ composer require rybakit/arguments-resolver
+```bash
+composer require rybakit/arguments-resolver
 ```
 
 
@@ -165,14 +165,14 @@ function foo($a, array $b, $c = null) {}
 ArgumentsResolver uses [PHPUnit](http://phpunit.de) for unit testing.
 In order to run the tests, you'll first need to setup the test suite using composer:
 
-```sh
-$ composer install
+```bash
+composer install
 ```
 
 You can then run the tests:
 
-```sh
-$ phpunit
+```bash
+vendor/bin/phpunit
 ```
 
 

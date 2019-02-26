@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the rybakit/arguments-resolver package.
+ *
+ * (c) Eugene Leonovich <gen.work@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ArgumentsResolver;
 
 abstract class ArgumentsResolver
@@ -9,9 +20,6 @@ abstract class ArgumentsResolver
      */
     protected $reflection;
 
-    /**
-     * @param mixed $function
-     */
     public function __construct($function)
     {
         $this->reflection = $function instanceof \ReflectionFunctionAbstract
@@ -24,17 +32,18 @@ abstract class ArgumentsResolver
      *
      * @param array $parameters
      *
-     * @return array
-     *
      * @throws UnresolvableArgumentException
+     * @throws \ReflectionException
+     *
+     * @return array
      */
-    public function resolve(array $parameters)
+    public function resolve(array $parameters) : array
     {
         if (!$number = $this->reflection->getNumberOfParameters()) {
             return [];
         }
 
-        $arguments = array_fill(0, $number, null);
+        $arguments = \array_fill(0, $number, null);
 
         foreach ($this->getParameters() as $pos => $parameter) {
             $result = $this->match($parameter, $parameters);
@@ -50,7 +59,7 @@ abstract class ArgumentsResolver
                 continue;
             }
 
-            throw new UnresolvableArgumentException($parameter);
+            throw UnresolvableArgumentException::fromParameter($parameter);
         }
 
         return $arguments;
@@ -61,7 +70,7 @@ abstract class ArgumentsResolver
      *
      * @return \ReflectionParameter[]
      */
-    protected function getParameters()
+    protected function getParameters() : array
     {
         return $this->reflection->getParameters();
     }
@@ -74,5 +83,5 @@ abstract class ArgumentsResolver
      *
      * @return array|null
      */
-    abstract protected function match(\ReflectionParameter $parameter, array $parameters);
+    abstract protected function match(\ReflectionParameter $parameter, array $parameters) : ?array;
 }
