@@ -25,11 +25,6 @@ class UnresolvableArgumentException extends \InvalidArgumentException
         ));
     }
 
-    /**
-     * @param \ReflectionFunctionAbstract $reflection
-     *
-     * @return string
-     */
     private static function getFunctionName(\ReflectionFunctionAbstract $reflection) : string
     {
         $name = $reflection->name.'()';

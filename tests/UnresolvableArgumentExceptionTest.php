@@ -18,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 final class UnresolvableArgumentExceptionTest extends TestCase
 {
+    use PhpUnitCompat;
+
     /**
      * @dataProvider provideReflectionData
      */
@@ -26,7 +28,7 @@ final class UnresolvableArgumentExceptionTest extends TestCase
         $parameters = $function->getParameters();
         $exception = UnresolvableArgumentException::fromParameter($parameters[0]);
 
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             sprintf('/^Unable to resolve argument \$\w+ \(#0\) of %s\(\)\.$/', preg_quote($expectedName, '/')),
             $exception->getMessage()
         );

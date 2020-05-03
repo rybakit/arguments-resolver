@@ -44,7 +44,8 @@ final class InDepthArgumentsResolverTest extends ArgumentsResolverTest
             float $float,
             string $string,
             $mixed = null
-        ) {};
+        ) {
+        };
 
         $result = [$callable, $stdClass, $array, $iterable, $int, $float, $string, $mixed];
         $input = [$mixed, $array, $float, $stdClass, $string, $callable, $int, $iterable];
