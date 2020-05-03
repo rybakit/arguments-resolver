@@ -21,7 +21,7 @@ final class ReflectionFactoryTest extends TestCase
     /**
      * @dataProvider provideFunctionData
      */
-    public function testCreatingReflection(string $expectedName, $function)
+    public function testCreatingReflection(string $expectedName, $function) : void
     {
         $reflection = ReflectionFactory::create($function);
 
@@ -34,15 +34,15 @@ final class ReflectionFactoryTest extends TestCase
         $testClassName = get_class($testClass);
 
         return [
-            [$testClassName.'::foo',            [$testClassName, 'foo']],
-            [$testClassName.'::foo',            [$testClass, 'foo']],
-            [$testClassName.'::bar',            [$testClassName, 'bar']],
-            [$testClassName.'::bar',            $testClassName.'::bar'],
-            [$testClassName.'::__construct',    [$testClassName, '__construct']],
-            [$testClassName.'::__construct',    [$testClass, '__construct']],
-            [$testClassName.'::__invoke',       $testClass],
-            ['Closure::__invoke',               function () {}],
-            ['abs',                             'abs'],
+            [$testClassName.'::foo', [$testClassName, 'foo']],
+            [$testClassName.'::foo', [$testClass, 'foo']],
+            [$testClassName.'::bar', [$testClassName, 'bar']],
+            [$testClassName.'::bar', $testClassName.'::bar'],
+            [$testClassName.'::__construct', [$testClassName, '__construct']],
+            [$testClassName.'::__construct', [$testClass, '__construct']],
+            [$testClassName.'::__invoke', $testClass],
+            ['Closure::__invoke', static function () {}],
+            ['abs', 'abs'],
         ];
     }
 

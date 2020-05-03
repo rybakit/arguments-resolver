@@ -30,12 +30,8 @@ abstract class ArgumentsResolver
     /**
      * Resolves function arguments.
      *
-     * @param array $parameters
-     *
      * @throws UnresolvableArgumentException
      * @throws \ReflectionException
-     *
-     * @return array
      */
     public function resolve(array $parameters) : array
     {
@@ -77,11 +73,6 @@ abstract class ArgumentsResolver
 
     /**
      * Returns the [key, value] pair if the parameter is matched or null otherwise.
-     *
-     * @param \ReflectionParameter $parameter
-     * @param array                $parameters
-     *
-     * @return array|null
      */
     abstract protected function match(\ReflectionParameter $parameter, array $parameters) : ?array;
 }

@@ -60,10 +60,7 @@ class InDepthArgumentsResolver extends ArgumentsResolver
     /**
      * Checks if the value matches the parameter type.
      *
-     * @param \ReflectionParameter $parameter
-     * @param mixed                $value
-     *
-     * @return bool
+     * @param mixed $value
      */
     private static function matchType(\ReflectionParameter $parameter, $value) : bool
     {
@@ -96,11 +93,6 @@ class InDepthArgumentsResolver extends ArgumentsResolver
 
     /**
      * Compares reflection parameters by type and position.
-     *
-     * @param \ReflectionParameter $a
-     * @param \ReflectionParameter $b
-     *
-     * @return int
      */
     private static function compareParameters(\ReflectionParameter $a, \ReflectionParameter $b) : int
     {
@@ -121,11 +113,6 @@ class InDepthArgumentsResolver extends ArgumentsResolver
 
     /**
      * Compares reflection parameters by class hierarchy.
-     *
-     * @param \ReflectionParameter $a
-     * @param \ReflectionParameter $b
-     *
-     * @return int
      */
     private static function compareParameterClasses(\ReflectionParameter $a, \ReflectionParameter $b) : int
     {
