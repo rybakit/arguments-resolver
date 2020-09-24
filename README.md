@@ -1,6 +1,6 @@
 ArgumentsResolver
 =================
-![Continuous Integration](https://github.com/rybakit/arguments-resolver/workflows/Continuous%20Integration/badge.svg)
+![Quality Assurance](https://github.com/rybakit/arguments-resolver/workflows/QA/badge.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rybakit/arguments-resolver/?branch=master)
 
