@@ -21,7 +21,7 @@ abstract class ArgumentsResolverTest extends TestCase
 {
     public function testResolvingByName() : void
     {
-        $function = function ($foo, $bar, $baz) {};
+        $function = static function ($foo, $bar, $baz) {};
         $result = ['foo', 'bar', 'baz'];
         $input = ['baz' => 'baz', 'bar' => 'bar', 'foo' => 'foo'];
 
@@ -30,7 +30,7 @@ abstract class ArgumentsResolverTest extends TestCase
 
     public function testResolvingOptional() : void
     {
-        $function = function ($foo = 'foo', $bar = 'bar') {};
+        $function = static function ($foo = 'foo', $bar = 'bar') {};
         $result = ['foo', 'bar'];
         $input = [];
 
@@ -39,7 +39,7 @@ abstract class ArgumentsResolverTest extends TestCase
 
     public function testResolvingEmpty() : void
     {
-        $function = function () {};
+        $function = static function () {};
         $result = [];
         $input = ['foo' => 'foo'];
 
@@ -51,7 +51,7 @@ abstract class ArgumentsResolverTest extends TestCase
         $this->expectException(UnresolvableArgumentException::class);
         $this->expectExceptionMessage('Unable to resolve argument');
 
-        $this->resolveArguments(function ($foo) {}, []);
+        $this->resolveArguments(static function ($foo) {}, []);
     }
 
     public function assertArguments(\Closure $function, array $result, array $input) : void

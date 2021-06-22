@@ -26,7 +26,7 @@ final class InDepthArgumentsResolverTest extends ArgumentsResolverTest
 
     public function testResolvingByType() : void
     {
-        $callable = function () {};
+        $callable = static function () {};
         $stdClass = new \stdClass();
         $array = ['baz'];
         $iterable = new \ArrayIterator([1, 2]);
@@ -35,7 +35,7 @@ final class InDepthArgumentsResolverTest extends ArgumentsResolverTest
         $string = 'foobar';
         $mixed = null;
 
-        $function = function (
+        $function = static function (
             callable $callable,
             \stdClass $stdClass,
             array $array,
@@ -55,7 +55,7 @@ final class InDepthArgumentsResolverTest extends ArgumentsResolverTest
 
     public function testResolvingOptionalByType() : void
     {
-        $function = function (callable $foo = null, array $bar = [], bool $baz = false) {};
+        $function = static function (callable $foo = null, array $bar = [], bool $baz = false) {};
         $result = [null, [], false];
         $input = [];
 
@@ -67,7 +67,7 @@ final class InDepthArgumentsResolverTest extends ArgumentsResolverTest
         $foo = (object) ['name' => 'foo'];
         $bar = (object) ['name' => 'bar'];
 
-        $function = function (\stdClass $foo, \stdClass $bar) {};
+        $function = static function (\stdClass $foo, \stdClass $bar) {};
         $result = [$foo, $bar];
         $input = ['bar' => $bar, 'foo' => $foo];
 
@@ -79,7 +79,7 @@ final class InDepthArgumentsResolverTest extends ArgumentsResolverTest
         $foo = new \Exception();
         $bar = new \RuntimeException();
 
-        $function = function (\Exception $foo, \RuntimeException $bar) {};
+        $function = static function (\Exception $foo, \RuntimeException $bar) {};
         $result = [$foo, $bar];
         $input = [$bar, $foo];
 
@@ -91,7 +91,7 @@ final class InDepthArgumentsResolverTest extends ArgumentsResolverTest
         $foo = new \RuntimeException();
         $bar = new \Exception();
 
-        $function = function (\RuntimeException $foo, \Exception $bar) {};
+        $function = static function (\RuntimeException $foo, \Exception $bar) {};
         $result = [$foo, $bar];
         $input = [$bar, $foo];
 
@@ -112,9 +112,9 @@ final class InDepthArgumentsResolverTest extends ArgumentsResolverTest
     public function provideInvalidParameterTypes() : iterable
     {
         return [
-            [function (array $foo) {}, [42]],
-            [function (callable $foo) {}, [42]],
-            [function (\stdClass $foo) {}, [42]],
+            [static function (array $foo) {}, [42]],
+            [static function (callable $foo) {}, [42]],
+            [static function (\stdClass $foo) {}, [42]],
         ];
     }
 }
